@@ -14,13 +14,6 @@ public class NamecardRequestDto {
     }
 
     @Getter
-    public static class CreateCategoryDto{
-        @ApiModelProperty(example = "친구")
-        @ApiParam(name = "category", value = "카테고리 이름 입력", required = true)
-        private String category;
-    }
-
-    @Getter
     public static class CreateNamecardDto{
         @ApiModelProperty(example = "최은지")
         @ApiParam(name = "name", value = "이름 입력", required = true)
