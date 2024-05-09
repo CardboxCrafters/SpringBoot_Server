@@ -29,23 +29,6 @@ public class NameCardController extends BaseController {
     private final NamecardService namecardService;
     private final UserRepository userRepository;
 
-    @ApiOperation(value = "Create Category API")
-    @ApiResponse(code = 200, message = "카테고리 생성 성공")
-    @PostMapping("/category")
-    public ResponseEntity createCategory(@RequestBody NamecardRequestDto.CreateCategoryDto request){
-        try {
-            logger.info("Received request: method={}, path={}, description={}", "POST", "/api/namecard/category", "Create Category API");
-            User user = userRepository.getByPhoneNumber("010-2944-0386");
-            String categoryName = request.getCategory();
-
-            namecardService.createCategory(user, categoryName);
-
-            return new ResponseEntity( DefaultRes.res(StatusCode.OK, ResponseMessage.CREATE_CATEGORY_SUCCESS), HttpStatus.OK);
-        } catch (CustomExceptions.testException e) {
-            return handleApiException(e, HttpStatus.BAD_REQUEST);
-        }
-    }
-
     @ApiOperation(value = "Save Namecard API")
     @ApiResponse(code = 200, message = "명함 등록 성공")
     @PostMapping("")

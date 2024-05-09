@@ -8,7 +8,6 @@ import com.mycompany.myapp.domain.User;
 import com.mycompany.myapp.web.dto.NamecardRequestDto;
 import com.mycompany.myapp.web.dto.NamecardResponseDto;
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Component;
 
 import java.io.IOException;

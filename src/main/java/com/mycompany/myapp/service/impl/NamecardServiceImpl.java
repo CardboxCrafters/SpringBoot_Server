@@ -31,15 +31,6 @@ public class NamecardServiceImpl implements NamecardService {
     private final NamecardRepository namecardRepository;
     private final CategoryRepository categoryRepository;
 
-    protected final Logger logger = LoggerFactory.getLogger(getClass());
-
-    @Transactional
-    @Override
-    public void createCategory(User user, String name){
-        Category category = namecardConverter.createCategory(user,name);
-        categoryRepository.save(category);
-    }
-
     @Transactional
     @Override
     public void createNamecard(User user, NamecardRequestDto.CreateNamecardDto request){
