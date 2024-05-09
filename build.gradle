@@ -31,11 +31,15 @@ dependencies {
 	annotationProcessor 'org.projectlombok:lombok'
 	testImplementation 'org.springframework.boot:spring-boot-starter-test'
 
+
 	implementation 'org.mapstruct:mapstruct:1.5.3.Final'
 	annotationProcessor 'org.mapstruct:mapstruct-processor:1.5.3.Final'
 
 	// swagger
 	implementation 'io.springfox:springfox-boot-starter:3.0.0'
+
+	//json
+	implementation 'org.json:json:20210307'
 }
 
 tasks.named('test') {

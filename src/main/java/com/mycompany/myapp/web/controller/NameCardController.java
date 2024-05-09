@@ -6,6 +6,7 @@ import com.mycompany.myapp.exception.StatusCode;
 import com.mycompany.myapp.repository.UserRepository;
 import com.mycompany.myapp.service.NamecardService;
 import com.mycompany.myapp.web.dto.NamecardRequestDto;
+import com.mycompany.myapp.web.dto.NamecardResponseDto;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiResponse;
@@ -61,4 +62,18 @@ public class NameCardController extends BaseController {
         }
     }
 
+    @ApiOperation(value = "POST OCR API")
+    @ApiResponse(code = 200, message = "OCR 요청 성공")
+    @PostMapping("/OCR")
+    public ResponseEntity saveNamecard(@RequestBody NamecardRequestDto.PostOCRDTO request){
+        try {
+            logger.info("Received request: method={}, path={}, description={}", "POST", "/api/namecard/OCR", "POST OCR API");
+
+            NamecardResponseDto.OCRResponseDto res = namecardService.postOCR(request);
+
+            return new ResponseEntity( DefaultRes.res(StatusCode.OK, ResponseMessage.POST_OCR_SUCCESS, res), HttpStatus.OK);
+        } catch (CustomExceptions.testException e) {
+            return handleApiException(e, HttpStatus.BAD_REQUEST);
+        }
+    }
 }

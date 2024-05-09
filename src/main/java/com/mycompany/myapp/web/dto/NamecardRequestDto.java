@@ -7,7 +7,7 @@ import lombok.Getter;
 public class NamecardRequestDto {
 
     @Getter
-    public static class OCRRequestDto{
+    public static class PostOCRDTO{
         @ApiModelProperty(example = "base64 encoding image")
         @ApiParam(name = "base64 encoding image", value = "base64 encoding image", required = true)
         private String base64Image;

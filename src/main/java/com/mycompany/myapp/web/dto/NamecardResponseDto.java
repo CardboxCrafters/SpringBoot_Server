@@ -2,8 +2,6 @@ package com.mycompany.myapp.web.dto;
 
 import lombok.*;
 
-import java.time.LocalDateTime;
-
 public class NamecardResponseDto {
     @Builder
     @Getter
