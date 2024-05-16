@@ -23,7 +23,7 @@ public class NamecardResponseDto {
     @Builder @Getter
     @AllArgsConstructor(access = AccessLevel.PROTECTED)
     @NoArgsConstructor(access = AccessLevel.PROTECTED)
-    public static class getNamecardDTO{
+    public static class NamecardDTO{
         private String name;
         private String company;
         private String department;
@@ -35,5 +35,17 @@ public class NamecardResponseDto {
         private String homepage;
         private String address;
         private String categoryName;
+    }
+
+    @Builder @Getter
+    @AllArgsConstructor(access = AccessLevel.PROTECTED)
+    @NoArgsConstructor(access = AccessLevel.PROTECTED)
+    public static class NamecardByCategoryDto{
+        private Long namecardId;
+        private String name;
+        private String position;
+        private String department;
+        private String company;
+        private String namecardUrl;
     }
 }

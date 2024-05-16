@@ -44,12 +44,12 @@ public class MapController extends BaseController {
         }
     }
 
-    @ApiOperation(value = "GET Map-Namecard API")
-    @ApiResponse(code = 200, message = "지도 명함 불러오기 성공")
+    @ApiOperation(value = "GET Map-Namecard By Category API")
+    @ApiResponse(code = 200, message = "지도 카테고리 별 명함 불러오기 성공")
     @GetMapping("/{namecard-id}")
-    public ResponseEntity getMapNamecard(@PathVariable("namecard-id") Long namecardId){
+    public ResponseEntity getMapNamecardByCategory(@PathVariable("namecard-id") Long namecardId){
         try {
-            logger.info("Received request: method={}, path={}, description={}", "GET", "/api/map/{namecard-id}", "GET Map-namecard API");
+            logger.info("Received request: method={}, path={}, description={}", "GET", "/api/map/{namecard-id}", "GET Map-namecard By Category API");
             User user = userRepository.getByPhoneNumber("010-2944-0386");
 
             MapResponseDto.MapNamecardDto res = mapService.getMapNamecard(namecardId);
@@ -59,7 +59,5 @@ public class MapController extends BaseController {
             return handleApiException(e, HttpStatus.BAD_REQUEST);
         }
     }
-
-
 
 }

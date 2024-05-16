@@ -10,6 +10,7 @@ import com.mycompany.myapp.web.dto.NamecardRequestDto;
 import com.mycompany.myapp.web.dto.NamecardResponseDto;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
+import io.swagger.annotations.ApiParam;
 import io.swagger.annotations.ApiResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -68,9 +69,25 @@ public class NameCardController extends BaseController {
             logger.info("Received request: method={}, path={}, description={}", "GET", "/api/namecard/{namecard-id}", "Get Namecard API");
             User user = userRepository.getByPhoneNumber("010-2944-0386");
 
-            NamecardResponseDto.getNamecardDTO res = namecardService.getNamecard(namecardId);
+            NamecardResponseDto.NamecardDTO res = namecardService.getNamecard(namecardId);
 
             return new ResponseEntity( DefaultRes.res(StatusCode.OK, ResponseMessage.GET_NAMECARD_SUCCESS, res), HttpStatus.OK);
+        } catch (CustomExceptions.testException e) {
+            return handleApiException(e, HttpStatus.BAD_REQUEST);
+        }
+    }
+
+    @ApiOperation(value = "Get Namecard List API")
+    @ApiResponse(code = 200, message = "카테고리 별 명함첩 불러오기 성공")
+    @GetMapping("")
+    public ResponseEntity getNamecardByCategory(@RequestParam("category-id") @ApiParam(value = "카테고리 ID", example = "1") Long categoryId){
+        try {
+            logger.info("Received request: method={}, path={}, description={}", "GET", "/api/namecard?category-id={category-id}", "Get Namecard List By Category API");
+            User user = userRepository.getByPhoneNumber("010-2944-0386");
+
+            List<NamecardResponseDto.NamecardByCategoryDto> res = namecardService.getNamecardByCategory(user, categoryId);
+
+            return new ResponseEntity( DefaultRes.res(StatusCode.OK, ResponseMessage.GET_NAMECARD_LIST_SUCCESS, res), HttpStatus.OK);
         } catch (CustomExceptions.testException e) {
             return handleApiException(e, HttpStatus.BAD_REQUEST);
         }

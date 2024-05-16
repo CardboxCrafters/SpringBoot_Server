@@ -20,7 +20,9 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.client.RestTemplate;
 
 import java.io.IOException;
+import java.util.List;
 import java.util.NoSuchElementException;
+import java.util.stream.Collectors;
 
 @Service
 @Transactional(readOnly = true)
@@ -84,10 +86,24 @@ public class NamecardServiceImpl implements NamecardService {
     }
 
     @Override
-    public NamecardResponseDto.getNamecardDTO getNamecard(Long namecardId){
+    public NamecardResponseDto.NamecardDTO getNamecard(Long namecardId){
         NameCard namecard = namecardRepository.findById(namecardId)
                 .orElseThrow(() -> new NoSuchElementException("Namecard not found."));
 
         return namecardConverter.getNamecard(namecard);
+    }
+
+    @Override
+    public List<NamecardResponseDto.NamecardByCategoryDto> getNamecardByCategory(User user, Long categoryId){
+        Category category = categoryRepository.findById(categoryId)
+                .orElseThrow(() -> new NoSuchElementException("Category not found."));
+
+        List<NameCard> nameCardList = namecardRepository.findByCategory(category);
+
+        List<NamecardResponseDto.NamecardByCategoryDto> res = nameCardList.stream().map(
+                namecard -> namecardConverter.toNamecardPage(namecard)
+        ).collect(Collectors.toList());
+
+        return res;
     }
 }

@@ -8,23 +8,23 @@ public class MapResponseDto {
 
     @Builder
     @Getter
-    @AllArgsConstructor
-    @NoArgsConstructor
+    @AllArgsConstructor(access = AccessLevel.PROTECTED)
+    @NoArgsConstructor(access = AccessLevel.PROTECTED)
     public static class LocationDataListDto{
         private List<LocationDataDto> LocationData;
 
         @Builder
         @Getter
-        @AllArgsConstructor
-        @NoArgsConstructor
+        @AllArgsConstructor(access = AccessLevel.PROTECTED)
+        @NoArgsConstructor(access = AccessLevel.PROTECTED)
         public static class LocationDataDto{
             private Long namecardId;
             private PointDto point;}
 
         @Builder
         @Getter
-        @AllArgsConstructor
-        @NoArgsConstructor
+        @AllArgsConstructor(access = AccessLevel.PROTECTED)
+        @NoArgsConstructor(access = AccessLevel.PROTECTED)
         public static class PointDto{
             private Double latitude;
             private Double longitude;
@@ -33,8 +33,8 @@ public class MapResponseDto {
 
     @Builder
     @Getter
-    @AllArgsConstructor
-    @NoArgsConstructor
+    @AllArgsConstructor(access = AccessLevel.PROTECTED)
+    @NoArgsConstructor(access = AccessLevel.PROTECTED)
     public static class MapNamecardDto{
         private Long namecardId;
         private String name;

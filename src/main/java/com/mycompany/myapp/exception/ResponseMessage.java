@@ -9,6 +9,7 @@ public class ResponseMessage {
     public static final String POST_OCR_SUCCESS = "OCR 요청 성공";
     public static final String CREATE_NAMECARD_SUCCESS = "명함 등록 성공";
     public static final String GET_NAMECARD_SUCCESS = "명함 불러오기 성공";
+    public static final String GET_NAMECARD_LIST_SUCCESS = "카테고리 별 명함첩 불러오기 성공";
 
     //category
     public static final String CREATE_CATEGORY_SUCCESS = "카테고리 생성 성공";
@@ -17,5 +18,5 @@ public class ResponseMessage {
 
     //map
     public static final String GET_MAP_SUCCESS = "지도 불러오기 성공";
-    public static final String GET_MAP_NAMECARD_SUCCESS = "지도 명함 불러오기 성공";
+    public static final String GET_MAP_NAMECARD_SUCCESS = "지도 카테고리 별 명함 불러오기 성공";
 }

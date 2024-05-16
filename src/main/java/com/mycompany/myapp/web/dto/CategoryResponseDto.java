@@ -6,8 +6,8 @@ public class CategoryResponseDto {
 
     @Builder
     @Getter
-    @AllArgsConstructor(access = AccessLevel.PROTECTED)
-    @NoArgsConstructor(access = AccessLevel.PROTECTED)
+    @AllArgsConstructor
+    @NoArgsConstructor
     public static class getCategoryDTO{
         private Long id;
         private String name;

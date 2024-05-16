@@ -89,8 +89,8 @@ public class NamecardConverter {
                 .build();
     }
 
-    public NamecardResponseDto.getNamecardDTO getNamecard(NameCard nameCard){
-        return NamecardResponseDto.getNamecardDTO.builder()
+    public NamecardResponseDto.NamecardDTO getNamecard(NameCard nameCard){
+        return NamecardResponseDto.NamecardDTO.builder()
                 .name(nameCard.getName())
                 .mobile(nameCard.getMobile())
                 .email(nameCard.getEmail())
@@ -113,6 +113,17 @@ public class NamecardConverter {
                 .department(nameCard.getDepartment())
                 .company(nameCard.getCompany())
                 .namecardUrl(nameCard.getUrl())
+                .build();
+    }
+
+    public NamecardResponseDto.NamecardByCategoryDto toNamecardPage(NameCard namecard){
+        return NamecardResponseDto.NamecardByCategoryDto.builder()
+                .namecardId(namecard.getId())
+                .name(namecard.getName())
+                .position(namecard.getPosition())
+                .department(namecard.getDepartment())
+                .company(namecard.getCompany())
+                .namecardUrl(namecard.getUrl())
                 .build();
     }
 }
