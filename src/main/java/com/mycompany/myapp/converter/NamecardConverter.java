@@ -5,6 +5,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.mycompany.myapp.domain.Category;
 import com.mycompany.myapp.domain.NameCard;
 import com.mycompany.myapp.domain.User;
+import com.mycompany.myapp.web.dto.MapResponseDto;
 import com.mycompany.myapp.web.dto.NamecardRequestDto;
 import com.mycompany.myapp.web.dto.NamecardResponseDto;
 import lombok.RequiredArgsConstructor;
@@ -101,6 +102,17 @@ public class NamecardConverter {
                 .fax(nameCard.getFax())
                 .homepage(nameCard.getHomepage())
                 .categoryName(nameCard.getCategory().getName())
+                .build();
+    }
+
+    public MapResponseDto.MapNamecardDto getMapNamecard(NameCard nameCard){
+        return MapResponseDto.MapNamecardDto.builder()
+                .namecardId(nameCard.getId())
+                .name(nameCard.getName())
+                .position(nameCard.getPosition())
+                .department(nameCard.getDepartment())
+                .company(nameCard.getCompany())
+                .namecardUrl(nameCard.getUrl())
                 .build();
     }
 }

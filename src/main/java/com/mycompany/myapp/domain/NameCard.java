@@ -44,4 +44,6 @@ public class NameCard extends BaseEntity {
     private String email;
 
     private String homepage;
+
+    private String url;
 }
