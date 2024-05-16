@@ -22,4 +22,5 @@ public class ResponseMessage {
 
     //user
     public static final String GET_USER_SUCCESS = "내 정보 불러오기 성공";
+    public static final String UPDATE_USER_SUCCESS = "내 정보 수정하기 성공";
 }
