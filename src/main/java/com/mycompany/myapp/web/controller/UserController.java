@@ -18,6 +18,7 @@ import io.swagger.annotations.ApiResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 
 @Api(tags = "유저 관련 API")
@@ -56,6 +57,22 @@ public class UserController extends BaseController {
             userService.updateUser(user, request);
 
             return new ResponseEntity( DefaultRes.res(StatusCode.OK, ResponseMessage.UPDATE_USER_SUCCESS), HttpStatus.OK);
+        } catch (CustomExceptions.testException e) {
+            return handleApiException(e, HttpStatus.BAD_REQUEST);
+        }
+    }
+
+    @ApiOperation(value = "Withdraw User API")
+    @ApiResponse(code = 200, message = "회원 탈퇴 성공")
+    @PatchMapping("")
+    public ResponseEntity withdrawUser(){
+        try {
+            logger.info("Received request: method={}, path={}, description={}", "PATCH", "/api/user", "Withdraw User API");
+            User user = userRepository.getByPhoneNumber("010-3020-0386");
+
+            userService.withdrawUser(user);
+
+            return new ResponseEntity( DefaultRes.res(StatusCode.OK, ResponseMessage.WITHDRAW_USER_SUCCESS), HttpStatus.OK);
         } catch (CustomExceptions.testException e) {
             return handleApiException(e, HttpStatus.BAD_REQUEST);
         }

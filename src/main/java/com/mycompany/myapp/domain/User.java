@@ -23,4 +23,8 @@ public class User extends BaseEntity {
 
     @Enumerated(EnumType.STRING)
     private UserStatus status;
+
+    public void withdrawUser(){
+        this.status = UserStatus.INACTIVE;
+    }
 }

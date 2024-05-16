@@ -8,4 +8,5 @@ import com.mycompany.myapp.web.dto.UserResponseDto;
 public interface UserService {
     UserResponseDto.UserDto getUser(User user);
     void updateUser(User user, UserRequestDto.UpdateUserDto request);
+    void withdrawUser(User user);
 }
