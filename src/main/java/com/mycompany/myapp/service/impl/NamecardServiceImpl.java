@@ -82,4 +82,12 @@ public class NamecardServiceImpl implements NamecardService {
             return null;
         }
     }
+
+    @Override
+    public NamecardResponseDto.getNamecardDTO getNamecard(Long namecardId){
+        NameCard namecard = namecardRepository.findById(namecardId)
+                .orElseThrow(() -> new NoSuchElementException("Namecard not found."));
+
+        return namecardConverter.getNamecard(namecard);
+    }
 }

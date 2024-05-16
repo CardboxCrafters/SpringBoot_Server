@@ -19,4 +19,21 @@ public class NamecardResponseDto {
         private String homepage;
         private String address;
     }
+
+    @Builder @Getter
+    @AllArgsConstructor(access = AccessLevel.PROTECTED)
+    @NoArgsConstructor(access = AccessLevel.PROTECTED)
+    public static class getNamecardDTO{
+        private String name;
+        private String company;
+        private String department;
+        private String position;
+        private String mobile;
+        private String email;
+        private String tel;
+        private String fax;
+        private String homepage;
+        private String address;
+        private String categoryName;
+    }
 }

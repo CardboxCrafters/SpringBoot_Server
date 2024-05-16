@@ -26,6 +26,7 @@ public class NamecardConverter {
     public NameCard createNamecard(User user, NamecardRequestDto.CreateNamecardDto request, Category category){
         return NameCard.builder()
                 .user(user)
+                .name(request.getName())
                 .mobile(request.getMobile())
                 .email(request.getEmail())
                 .company(request.getCompany())
@@ -84,6 +85,22 @@ public class NamecardConverter {
                 .fax(fax)
                 .homepage(homepage)
                 .address(address)
+                .build();
+    }
+
+    public NamecardResponseDto.getNamecardDTO getNamecard(NameCard nameCard){
+        return NamecardResponseDto.getNamecardDTO.builder()
+                .name(nameCard.getName())
+                .mobile(nameCard.getMobile())
+                .email(nameCard.getEmail())
+                .company(nameCard.getCompany())
+                .department(nameCard.getDepartment())
+                .position(nameCard.getPosition())
+                .tel(nameCard.getTel())
+                .address(nameCard.getAddress())
+                .fax(nameCard.getFax())
+                .homepage(nameCard.getHomepage())
+                .categoryName(nameCard.getCategory().getName())
                 .build();
     }
 }

@@ -5,6 +5,7 @@ import com.mycompany.myapp.exception.ResponseMessage;
 import com.mycompany.myapp.exception.StatusCode;
 import com.mycompany.myapp.repository.UserRepository;
 import com.mycompany.myapp.service.NamecardService;
+import com.mycompany.myapp.web.dto.CategoryResponseDto;
 import com.mycompany.myapp.web.dto.NamecardRequestDto;
 import com.mycompany.myapp.web.dto.NamecardResponseDto;
 import io.swagger.annotations.Api;
@@ -13,13 +14,12 @@ import io.swagger.annotations.ApiResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import com.mycompany.myapp.exception.CustomExceptions;
 import com.mycompany.myapp.web.controller.base.BaseController;
 import com.mycompany.myapp.web.dto.base.DefaultRes;
+
+import java.util.List;
 
 @Api(tags = "명함첩 관련 API")
 @RestController
@@ -55,6 +55,22 @@ public class NameCardController extends BaseController {
             NamecardResponseDto.OCRResponseDto res = namecardService.postOCR(request);
 
             return new ResponseEntity( DefaultRes.res(StatusCode.OK, ResponseMessage.POST_OCR_SUCCESS, res), HttpStatus.OK);
+        } catch (CustomExceptions.testException e) {
+            return handleApiException(e, HttpStatus.BAD_REQUEST);
+        }
+    }
+
+    @ApiOperation(value = "Get Namecard API")
+    @ApiResponse(code = 200, message = "명함 불러오기 성공")
+    @GetMapping("/{namecard-id}")
+    public ResponseEntity getNamecard(@PathVariable("namecard-id") Long namecardId){
+        try {
+            logger.info("Received request: method={}, path={}, description={}", "GET", "/api/namecard/{namecard-id}", "Get Namecard API");
+            User user = userRepository.getByPhoneNumber("010-2944-0386");
+
+            NamecardResponseDto.getNamecardDTO res = namecardService.getNamecard(namecardId);
+
+            return new ResponseEntity( DefaultRes.res(StatusCode.OK, ResponseMessage.GET_NAMECARD_SUCCESS, res), HttpStatus.OK);
         } catch (CustomExceptions.testException e) {
             return handleApiException(e, HttpStatus.BAD_REQUEST);
         }
