@@ -21,8 +21,6 @@ public class User extends BaseEntity {
     @Column(unique = true, nullable = false)
     private String phoneNumber;
 
-    private String profileUrl;
-
     @Enumerated(EnumType.STRING)
     private UserStatus status;
 }

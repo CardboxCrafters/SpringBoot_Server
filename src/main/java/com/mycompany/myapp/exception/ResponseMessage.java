@@ -19,4 +19,7 @@ public class ResponseMessage {
     //map
     public static final String GET_MAP_SUCCESS = "지도 불러오기 성공";
     public static final String GET_MAP_NAMECARD_SUCCESS = "지도 카테고리 별 명함 불러오기 성공";
+
+    //user
+    public static final String GET_USER_SUCCESS = "내 정보 불러오기 성공";
 }
