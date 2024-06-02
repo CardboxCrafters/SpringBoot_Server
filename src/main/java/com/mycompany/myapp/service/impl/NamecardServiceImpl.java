@@ -21,6 +21,8 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.client.RestTemplate;
 
 import java.io.IOException;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.stream.Collectors;
@@ -100,7 +102,7 @@ public class NamecardServiceImpl implements NamecardService {
     }
 
     @Override
-    public List<NamecardResponseDto.NamecardByCategoryDto> getNamecardByCategory(User user, Long categoryId){
+    public List<NamecardResponseDto.NamecardPreviewDto> getNamecardByCategory(User user, Long categoryId){
         Category category = categoryRepository.findById(categoryId)
                 .orElseThrow(() -> new NoSuchElementException("Category not found."));
 
@@ -112,10 +114,23 @@ public class NamecardServiceImpl implements NamecardService {
             nameCardList = namecardRepository.findByCategory(category);
         }
 
-        List<NamecardResponseDto.NamecardByCategoryDto> res = nameCardList.stream().map(
-                namecard -> namecardConverter.toNamecardPage(namecard)
-        ).collect(Collectors.toList());
+        Collections.sort(nameCardList, Comparator.comparing(NameCard::getName));
 
-        return res;
+        return nameCardList.stream().map(
+                namecardConverter::toNamecardPage
+        ).collect(Collectors.toList());
+    }
+
+    @Override
+    public List<NamecardResponseDto.NamecardPreviewDto> searchNamecard(User user, String keyword){
+        List<NameCard> nameCardList;
+
+        nameCardList = namecardRepository.findByNameContaining(keyword);
+
+        Collections.sort(nameCardList, Comparator.comparing(NameCard::getName));
+
+        return nameCardList.stream().map(
+                namecardConverter::toNamecardPage
+        ).collect(Collectors.toList());
     }
 }

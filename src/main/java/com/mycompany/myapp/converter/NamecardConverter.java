@@ -117,8 +117,9 @@ public class NamecardConverter {
                 .build();
     }
 
-    public NamecardResponseDto.NamecardByCategoryDto toNamecardPage(NameCard namecard){
-        return NamecardResponseDto.NamecardByCategoryDto.builder()
+    public NamecardResponseDto.NamecardPreviewDto toNamecardPage(NameCard namecard){
+        return NamecardResponseDto.NamecardPreviewDto.builder()
+                .categoryId(namecard.getCategory().getId())
                 .namecardId(namecard.getId())
                 .name(namecard.getName())
                 .position(namecard.getPosition())

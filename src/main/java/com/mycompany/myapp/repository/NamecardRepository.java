@@ -23,4 +23,5 @@ public interface NamecardRepository extends JpaRepository<NameCard, Long> {
     @Query("UPDATE NameCard n SET n.name = :name, n.company = :company, n.department = :department, n.position = :position, n.mobile = :mobile, n.email = :email, n.tel = :tel, n.fax = :fax, n.homepage = :homepage, n.address = :address")
     void updateNamecard(@Param("name") String name, @Param("company") String company, @Param("department") String department, @Param("position") String position, @Param("mobile") String mobile, @Param("email") String email, @Param("tel") String tel, @Param("fax") String fax, @Param("homepage") String homepage, @Param("address") String address);
 
+    List<NameCard> findByNameContaining(String keyword);
 }

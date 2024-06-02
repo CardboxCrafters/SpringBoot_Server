@@ -85,9 +85,25 @@ public class NameCardController extends BaseController {
             logger.info("Received request: method={}, path={}, description={}", "GET", "/api/namecard?category-id={category-id}", "Get Namecard List By Category API");
             User user = userRepository.getByPhoneNumber("010-2944-0386");
 
-            List<NamecardResponseDto.NamecardByCategoryDto> res = namecardService.getNamecardByCategory(user, categoryId);
+            List<NamecardResponseDto.NamecardPreviewDto> res = namecardService.getNamecardByCategory(user, categoryId);
 
             return new ResponseEntity( DefaultRes.res(StatusCode.OK, ResponseMessage.GET_NAMECARD_LIST_SUCCESS, res), HttpStatus.OK);
+        } catch (CustomExceptions.testException e) {
+            return handleApiException(e, HttpStatus.BAD_REQUEST);
+        }
+    }
+
+    @ApiOperation(value = "Search Namecard API")
+    @ApiResponse(code = 200, message = "명함 검색하기 성공")
+    @GetMapping("/search")
+    public ResponseEntity getNamecardBykeyword(@RequestParam("keyword") @ApiParam(value = "검색 키워드", example = "1") String keyword){
+        try {
+            logger.info("Received request: method={}, path={}, description={}", "GET", "/api/namecard?keyword={keyword}", "Search Namecard API");
+            User user = userRepository.getByPhoneNumber("010-2944-0386");
+
+            List<NamecardResponseDto.NamecardPreviewDto> res = namecardService.searchNamecard(user, keyword);
+
+            return new ResponseEntity( DefaultRes.res(StatusCode.OK, ResponseMessage.SEARCH_NAMECARD_SUCCESS, res), HttpStatus.OK);
         } catch (CustomExceptions.testException e) {
             return handleApiException(e, HttpStatus.BAD_REQUEST);
         }
