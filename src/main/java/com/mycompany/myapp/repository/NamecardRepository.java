@@ -14,6 +14,8 @@ import java.util.List;
 public interface NamecardRepository extends JpaRepository<NameCard, Long> {
     List<NameCard> findByCategory(Category category);
 
+    List<NameCard> findByUserAndIsUserFalse(User user);
+
     NameCard findByUserAndIsUserTrue(User user);
 
     @Modifying

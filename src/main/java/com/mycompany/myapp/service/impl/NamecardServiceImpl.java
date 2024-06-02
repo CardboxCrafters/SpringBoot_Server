@@ -1,9 +1,12 @@
 package com.mycompany.myapp.service.impl;
 
+import com.mycompany.myapp.converter.AddressConverter;
 import com.mycompany.myapp.converter.NamecardConverter;
+import com.mycompany.myapp.domain.Address;
 import com.mycompany.myapp.domain.Category;
 import com.mycompany.myapp.domain.NameCard;
 import com.mycompany.myapp.domain.User;
+import com.mycompany.myapp.repository.AddressRepository;
 import com.mycompany.myapp.repository.CategoryRepository;
 import com.mycompany.myapp.repository.NamecardRepository;
 import com.mycompany.myapp.service.NamecardService;
@@ -12,8 +15,6 @@ import com.mycompany.myapp.web.dto.NamecardResponseDto;
 import lombok.RequiredArgsConstructor;
 import org.json.JSONArray;
 import org.json.JSONObject;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.http.*;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -32,6 +33,8 @@ public class NamecardServiceImpl implements NamecardService {
     private final NamecardConverter namecardConverter;
     private final NamecardRepository namecardRepository;
     private final CategoryRepository categoryRepository;
+    private final AddressConverter addressConverter;
+    private final AddressRepository addressRepository;
 
     @Transactional
     @Override
@@ -41,6 +44,9 @@ public class NamecardServiceImpl implements NamecardService {
 
         NameCard nameCard = namecardConverter.createNamecard(user, request, category);
         namecardRepository.save(nameCard);
+
+        Address address = addressConverter.createAddress(request, nameCard);
+        addressRepository.save(address);
     }
 
     @Override
@@ -98,7 +104,13 @@ public class NamecardServiceImpl implements NamecardService {
         Category category = categoryRepository.findById(categoryId)
                 .orElseThrow(() -> new NoSuchElementException("Category not found."));
 
-        List<NameCard> nameCardList = namecardRepository.findByCategory(category);
+        List<NameCard> nameCardList;
+
+        if ("all".equals(category.getName())){
+            nameCardList = namecardRepository.findByUserAndIsUserFalse(category.getUser());
+        } else {
+            nameCardList = namecardRepository.findByCategory(category);
+        }
 
         List<NamecardResponseDto.NamecardByCategoryDto> res = nameCardList.stream().map(
                 namecard -> namecardConverter.toNamecardPage(namecard)

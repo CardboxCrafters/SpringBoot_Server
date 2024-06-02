@@ -38,6 +38,7 @@ public class NamecardConverter {
                 .homepage(request.getHomepage())
                 .address(request.getAddress())
                 .category(category)
+                .isUser(false)
                 .build();
     }
 
