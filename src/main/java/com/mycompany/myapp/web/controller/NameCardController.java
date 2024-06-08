@@ -19,7 +19,9 @@ import org.springframework.web.bind.annotation.*;
 import com.mycompany.myapp.exception.CustomExceptions;
 import com.mycompany.myapp.web.controller.base.BaseController;
 import com.mycompany.myapp.web.dto.base.DefaultRes;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
 import java.util.List;
 
 @Api(tags = "명함첩 관련 API")
@@ -33,12 +35,13 @@ public class NameCardController extends BaseController {
     @ApiOperation(value = "Save Namecard API")
     @ApiResponse(code = 200, message = "명함 등록 성공")
     @PostMapping("")
-    public ResponseEntity saveNamecard(@RequestBody NamecardRequestDto.CreateNamecardDto request){
+    public ResponseEntity saveNamecard(@RequestPart("image") MultipartFile image,
+                                       @RequestPart("request") NamecardRequestDto.CreateNamecardDto request) throws IOException {
         try {
             logger.info("Received request: method={}, path={}, description={}", "POST", "/api/namecard", "Save Namecard API");
             User user = userRepository.getByPhoneNumber("010-2944-0386");
 
-            namecardService.createNamecard(user, request);
+            namecardService.createNamecard(user, request, image);
 
             return new ResponseEntity( DefaultRes.res(StatusCode.OK, ResponseMessage.CREATE_NAMECARD_SUCCESS), HttpStatus.OK);
         } catch (CustomExceptions.testException e) {
@@ -49,11 +52,11 @@ public class NameCardController extends BaseController {
     @ApiOperation(value = "POST OCR API")
     @ApiResponse(code = 200, message = "OCR 요청 성공")
     @PostMapping("/OCR")
-    public ResponseEntity saveNamecard(@RequestBody NamecardRequestDto.PostOCRDTO request){
+    public ResponseEntity saveNamecard(@RequestPart("image") MultipartFile image){
         try {
             logger.info("Received request: method={}, path={}, description={}", "POST", "/api/namecard/OCR", "POST OCR API");
 
-            NamecardResponseDto.OCRResponseDto res = namecardService.postOCR(request);
+            NamecardResponseDto.OCRResponseDto res = namecardService.postOCR(image);
 
             return new ResponseEntity( DefaultRes.res(StatusCode.OK, ResponseMessage.POST_OCR_SUCCESS, res), HttpStatus.OK);
         } catch (CustomExceptions.testException e) {

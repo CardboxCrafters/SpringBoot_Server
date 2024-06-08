@@ -24,7 +24,7 @@ public class NamecardConverter {
                 .build();
     }
 
-    public NameCard createNamecard(User user, NamecardRequestDto.CreateNamecardDto request, Category category){
+    public NameCard createNamecard(User user, NamecardRequestDto.CreateNamecardDto request, Category category, String imageUrl){
         return NameCard.builder()
                 .user(user)
                 .name(request.getName())
@@ -39,6 +39,7 @@ public class NamecardConverter {
                 .address(request.getAddress())
                 .category(category)
                 .isUser(false)
+                .url(imageUrl)
                 .build();
     }
 
@@ -119,7 +120,7 @@ public class NamecardConverter {
 
     public NamecardResponseDto.NamecardPreviewDto toNamecardPage(NameCard namecard){
         return NamecardResponseDto.NamecardPreviewDto.builder()
-                .categoryId(namecard.getCategory().getId())
+                .category(namecard.getCategory().getName())
                 .namecardId(namecard.getId())
                 .name(namecard.getName())
                 .position(namecard.getPosition())

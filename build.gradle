@@ -19,6 +19,12 @@ configurations {
 
 repositories {
 	mavenCentral()
+	maven {
+		url 'https://repo.opencv.org/maven/'
+	}
+	maven {
+		url 'https://jitpack.io'
+	}
 }
 
 dependencies {
@@ -40,6 +46,16 @@ dependencies {
 
 	//json
 	implementation 'org.json:json:20210307'
+
+	//base64
+	implementation group: 'commons-codec', name: 'commons-codec', version: '1.15'
+
+	// AWS SDK for S3
+	implementation 'com.amazonaws:aws-java-sdk-s3:1.12.488'
+
+	//OpenCV
+	implementation files('opencv/build/java/opencv-4100.jar')
+
 }
 
 tasks.named('test') {

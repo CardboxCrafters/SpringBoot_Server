@@ -3,18 +3,14 @@ package com.mycompany.myapp.web.dto;
 import io.swagger.annotations.ApiModelProperty;
 import io.swagger.annotations.ApiParam;
 import lombok.Getter;
+import org.springframework.web.multipart.MultipartFile;
+
+import java.io.Serializable;
 
 public class NamecardRequestDto {
 
     @Getter
-    public static class PostOCRDTO{
-        @ApiModelProperty(example = "base64 encoding image")
-        @ApiParam(name = "base64 encoding image", value = "base64 encoding image", required = true)
-        private String base64Image;
-    }
-
-    @Getter
-    public static class CreateNamecardDto{
+    public static class CreateNamecardDto {
         @ApiModelProperty(example = "최은지")
         @ApiParam(name = "name", value = "이름 입력", required = true)
         private String name;

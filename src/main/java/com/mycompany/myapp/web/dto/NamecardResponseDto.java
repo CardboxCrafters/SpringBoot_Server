@@ -41,7 +41,7 @@ public class NamecardResponseDto {
     @AllArgsConstructor(access = AccessLevel.PROTECTED)
     @NoArgsConstructor(access = AccessLevel.PROTECTED)
     public static class NamecardPreviewDto{
-        private Long categoryId;
+        private String category;
         private Long namecardId;
         private String name;
         private String position;

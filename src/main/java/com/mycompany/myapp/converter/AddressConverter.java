@@ -8,7 +8,7 @@ import com.mycompany.myapp.domain.NameCard;
 import com.mycompany.myapp.web.dto.MapResponseDto;
 import com.mycompany.myapp.web.dto.NamecardRequestDto;
 import lombok.RequiredArgsConstructor;
-import lombok.Value;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
@@ -24,6 +24,9 @@ import java.util.stream.Collectors;
 @Component
 public class AddressConverter {
     private final RestTemplate restTemplate;
+
+    @Value("${kakao.api.key}")
+    private String kakaoApiKey;
 
     public MapResponseDto.LocationDataListDto toAddressDataListDto(List<Address> nearbyAddress){
         return MapResponseDto.LocationDataListDto.builder()
@@ -51,7 +54,7 @@ public class AddressConverter {
         String url = "https://dapi.kakao.com/v2/local/search/address.json?query=" + request.getAddress();
 
         HttpHeaders headers = new HttpHeaders();
-        headers.set("Authorization", "KakaoAK 3bcc5d1885a09ac5a22cf7d7592ccca7");
+        headers.set("Authorization", "KakaoAK " + kakaoApiKey);
 
         HttpEntity<String> entity = new HttpEntity<>(headers);
 
