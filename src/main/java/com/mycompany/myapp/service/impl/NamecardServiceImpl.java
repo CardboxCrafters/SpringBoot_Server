@@ -106,4 +106,13 @@ public class NamecardServiceImpl implements NamecardService {
                 namecardConverter::toNamecardPage
         ).collect(Collectors.toList());
     }
+
+    @Override
+    @Transactional
+    public void deleteNamecard(Long namecardId){
+        NameCard nameCard = namecardRepository.findById(namecardId)
+                .orElseThrow(() -> new NoSuchElementException("Namecard not found"));
+
+        namecardRepository.delete(nameCard);
+    }
 }

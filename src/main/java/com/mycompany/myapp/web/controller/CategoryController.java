@@ -55,7 +55,7 @@ public class CategoryController extends BaseController {
             logger.info("Received request: method={}, path={}, description={}", "DELETE", "/api/category", "DELETE Category API");
             User user = userRepository.getByPhoneNumber("010-2944-0386");
 
-            categoryService.deleteCategory(user, categoryId);
+            categoryService.deleteCategory(categoryId);
 
             return new ResponseEntity( DefaultRes.res(StatusCode.OK, ResponseMessage.DELETE_CATEGORY_SUCCESS), HttpStatus.OK);
         } catch (CustomExceptions.testException e) {

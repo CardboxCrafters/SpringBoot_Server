@@ -14,4 +14,5 @@ public interface NamecardService {
     NamecardResponseDto.NamecardDTO getNamecard(Long namecardId);
     List<NamecardResponseDto.NamecardPreviewDto> getNamecardByCategory(User user, Long categoryId);
     List<NamecardResponseDto.NamecardPreviewDto> searchNamecard(User user, String keyword);
+    void deleteNamecard(Long namecardId);
 }

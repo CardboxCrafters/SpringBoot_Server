@@ -8,6 +8,7 @@ import com.mycompany.myapp.service.NamecardService;
 import com.mycompany.myapp.web.dto.CategoryResponseDto;
 import com.mycompany.myapp.web.dto.NamecardRequestDto;
 import com.mycompany.myapp.web.dto.NamecardResponseDto;
+import com.mycompany.myapp.web.dto.UserRequestDto;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
@@ -107,6 +108,22 @@ public class NameCardController extends BaseController {
             List<NamecardResponseDto.NamecardPreviewDto> res = namecardService.searchNamecard(user, keyword);
 
             return new ResponseEntity( DefaultRes.res(StatusCode.OK, ResponseMessage.SEARCH_NAMECARD_SUCCESS, res), HttpStatus.OK);
+        } catch (CustomExceptions.testException e) {
+            return handleApiException(e, HttpStatus.BAD_REQUEST);
+        }
+    }
+
+    @ApiOperation(value = "Delete Namecard API")
+    @ApiResponse(code = 200, message = "명함 삭제하기 성공")
+    @DeleteMapping("/{namecard-id}")
+    public ResponseEntity deleteCategory(@PathVariable("namecard-id") Long namecardId){
+        try {
+            logger.info("Received request: method={}, path={}, description={}", "DELETE", "/api/namecard/{namecard-id}", "DELETE Namecard API");
+            User user = userRepository.getByPhoneNumber("010-2944-0386");
+
+            namecardService.deleteNamecard(namecardId);
+
+            return new ResponseEntity( DefaultRes.res(StatusCode.OK, ResponseMessage.DELETE_NAMECARD_SUCCESS), HttpStatus.OK);
         } catch (CustomExceptions.testException e) {
             return handleApiException(e, HttpStatus.BAD_REQUEST);
         }
