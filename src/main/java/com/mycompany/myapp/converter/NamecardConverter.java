@@ -24,7 +24,7 @@ public class NamecardConverter {
                 .build();
     }
 
-    public NameCard createNamecard(User user, NamecardRequestDto.CreateNamecardDto request, Category category, String imageUrl){
+    public NameCard createNamecard(User user, NamecardRequestDto.NamecardDto request, Category category, String imageUrl){
         return NameCard.builder()
                 .user(user)
                 .name(request.getName())

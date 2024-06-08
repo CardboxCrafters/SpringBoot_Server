@@ -37,7 +37,7 @@ public class NameCardController extends BaseController {
     @ApiResponse(code = 200, message = "명함 등록 성공")
     @PostMapping("")
     public ResponseEntity saveNamecard(@RequestPart("image") MultipartFile image,
-                                       @RequestPart("request") NamecardRequestDto.CreateNamecardDto request) throws IOException {
+                                       @RequestPart("request") NamecardRequestDto.NamecardDto request) throws IOException {
         try {
             logger.info("Received request: method={}, path={}, description={}", "POST", "/api/namecard", "Save Namecard API");
             User user = userRepository.getByPhoneNumber("010-2944-0386");
@@ -124,6 +124,22 @@ public class NameCardController extends BaseController {
             namecardService.deleteNamecard(namecardId);
 
             return new ResponseEntity( DefaultRes.res(StatusCode.OK, ResponseMessage.DELETE_NAMECARD_SUCCESS), HttpStatus.OK);
+        } catch (CustomExceptions.testException e) {
+            return handleApiException(e, HttpStatus.BAD_REQUEST);
+        }
+    }
+
+    @ApiOperation(value = "Update Namecard API")
+    @ApiResponse(code = 200, message = "명함 수정하기 성공")
+    @PatchMapping("/{namecard-id}")
+    public ResponseEntity updateUser(@PathVariable("namecard-id") Long namecardId, @RequestBody NamecardRequestDto.NamecardDto request){
+        try {
+            logger.info("Received request: method={}, path={}, description={}", "PATCH", "/api/namecard/namecardId", "Update Namecard API");
+            User user = userRepository.getByPhoneNumber("010-2944-0386");
+
+            namecardService.updateNamecard(request, namecardId);
+
+            return new ResponseEntity( DefaultRes.res(StatusCode.OK, ResponseMessage.UPDATE_NAMECARD_SUCCESS), HttpStatus.OK);
         } catch (CustomExceptions.testException e) {
             return handleApiException(e, HttpStatus.BAD_REQUEST);
         }

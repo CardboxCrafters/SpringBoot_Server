@@ -50,7 +50,7 @@ public class AddressConverter {
                 .build();
     }
 
-    public Address createAddress(NamecardRequestDto.CreateNamecardDto request, NameCard namecard){
+    public Address createAddress(NamecardRequestDto.NamecardDto request, NameCard namecard){
         String url = "https://dapi.kakao.com/v2/local/search/address.json?query=" + request.getAddress();
 
         HttpHeaders headers = new HttpHeaders();

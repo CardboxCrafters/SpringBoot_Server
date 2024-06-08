@@ -36,7 +36,7 @@ public class NamecardServiceImpl implements NamecardService {
 
     @Transactional
     @Override
-    public void createNamecard(User user, NamecardRequestDto.CreateNamecardDto request, MultipartFile image) throws IOException {
+    public void createNamecard(User user, NamecardRequestDto.NamecardDto request, MultipartFile image) throws IOException {
         //이미지 크롭
         byte[] croppedImageBytes = HttpRequestUtils.cropImage(image);
 
@@ -114,5 +114,19 @@ public class NamecardServiceImpl implements NamecardService {
                 .orElseThrow(() -> new NoSuchElementException("Namecard not found"));
 
         namecardRepository.delete(nameCard);
+    }
+
+    @Override
+    @Transactional
+    public void updateNamecard(NamecardRequestDto.NamecardDto request, Long namecardId){
+        NameCard namecard = namecardRepository.findById(namecardId)
+                .orElseThrow(() -> new NoSuchElementException("Namecard not found"));
+
+        Category category = categoryRepository.findById(request.getCategoryId())
+                .orElseThrow(() -> new NoSuchElementException("Category not found"));
+
+        namecard.updateNamecard(request, category);
+
+        namecardRepository.save(namecard);
     }
 }

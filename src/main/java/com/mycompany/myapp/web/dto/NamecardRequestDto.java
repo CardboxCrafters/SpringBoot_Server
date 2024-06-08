@@ -10,7 +10,7 @@ import java.io.Serializable;
 public class NamecardRequestDto {
 
     @Getter
-    public static class CreateNamecardDto {
+    public static class NamecardDto {
         @ApiModelProperty(example = "최은지")
         @ApiParam(name = "name", value = "이름 입력", required = true)
         private String name;
