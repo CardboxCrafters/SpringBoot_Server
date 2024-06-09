@@ -49,9 +49,24 @@ public class UserRequestDto {
     }
 
     @Getter
-    public static class SmsCertificationDto{
+    public static class SendSmsCertificationDto{
         @ApiModelProperty(example = "010-1234-5678")
         @ApiParam(name = "phone", value = "휴대폰 번호 입력", required = true)
         private String phone;
+    }
+
+    @Getter
+    public static class ConfirmSmsCertificationDto{
+        @ApiModelProperty(example = "박재윤")
+        @ApiParam(name = "name", value = "이름 입력", required = true)
+        private String name;
+
+        @ApiModelProperty(example = "010-1234-5678")
+        @ApiParam(name = "phone", value = "휴대폰 번호 입력", required = true)
+        private String phone;
+
+        @ApiModelProperty(example = "1234")
+        @ApiParam(name = "certificationNumber", value = "인증 번호 입력", required = true)
+        private String certificationNumber;
     }
 }

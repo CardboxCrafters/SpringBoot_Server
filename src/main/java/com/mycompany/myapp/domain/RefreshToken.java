@@ -5,8 +5,7 @@ import javax.persistence.*;
 import java.util.Date;
 
 @Entity
-@Builder
-@Getter
+@Builder @Getter
 @AllArgsConstructor(access = AccessLevel.PRIVATE)
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class RefreshToken {
@@ -17,9 +16,10 @@ public class RefreshToken {
     @Column(name = "token", length = 1000)
     private String token;
 
-    @OneToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.PERSIST)
     @JoinColumn(name = "user_id")
     private User user;
+
     @Column()
     private Date expirationTime;
 

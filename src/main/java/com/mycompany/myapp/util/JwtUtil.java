@@ -113,7 +113,7 @@ public class JwtUtil {
         RefreshToken refreshToken = refreshTokenRepository.findByToken(token);
 
         if (refreshToken == null || isTokenExpired(token)) {
-            throw new CustomExceptions.RefreshTokenInvalidException("Refresh Token이 유효하지 않습니다.");
+            throw new CustomExceptions.Exception("Refresh Token이 유효하지 않습니다.");
         }
 
         User user = refreshToken.getUser();
@@ -125,7 +125,7 @@ public class JwtUtil {
         Long id = extractId(refreshToken);
 
         if (userDetails == null || isTokenExpired(refreshToken)) {
-            throw new CustomExceptions.RefreshTokenInvalidException("Refresh Token이 유효하지 않습니다.");
+            throw new CustomExceptions.Exception("Refresh Token이 유효하지 않습니다.");
         }
         return generateAccessToken(id);
     }

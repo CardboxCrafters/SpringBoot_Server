@@ -8,5 +8,7 @@ public interface UserService {
     UserResponseDto.UserDto getUser(User user);
     void updateUser(User user, UserRequestDto.UpdateUserDto request);
     void withdrawUser(User user);
-    void sendSms(UserRequestDto.SmsCertificationDto request);
+    void sendSms(UserRequestDto.SendSmsCertificationDto request);
+    Long verifyAndRegisterUser(UserRequestDto.ConfirmSmsCertificationDto request);
+    void saveRefreshToken(String refreshToken);
 }

@@ -36,13 +36,13 @@ public class CategoryController extends BaseController {
     public ResponseEntity createCategory(@RequestBody CategoryRequestDto.CreateCategoryDto request){
         try {
             logger.info("Received request: method={}, path={}, description={}", "POST", "/api/category", "Create Category API");
-            User user = userRepository.getByPhoneNumber("010-2944-0386");
+            User user = userRepository.getByPhoneNumber("01029440386");
             String categoryName = request.getCategory();
 
             categoryService.createCategory(user, categoryName);
 
             return new ResponseEntity( DefaultRes.res(StatusCode.OK, ResponseMessage.CREATE_CATEGORY_SUCCESS), HttpStatus.OK);
-        } catch (CustomExceptions.testException e) {
+        } catch (CustomExceptions.Exception e) {
             return handleApiException(e, HttpStatus.BAD_REQUEST);
         }
     }
@@ -53,12 +53,12 @@ public class CategoryController extends BaseController {
     public ResponseEntity deleteCategory(@PathVariable("category-id") Long categoryId){
         try {
             logger.info("Received request: method={}, path={}, description={}", "DELETE", "/api/category", "DELETE Category API");
-            User user = userRepository.getByPhoneNumber("010-2944-0386");
+            User user = userRepository.getByPhoneNumber("01029440386");
 
             categoryService.deleteCategory(categoryId);
 
             return new ResponseEntity( DefaultRes.res(StatusCode.OK, ResponseMessage.DELETE_CATEGORY_SUCCESS), HttpStatus.OK);
-        } catch (CustomExceptions.testException e) {
+        } catch (CustomExceptions.Exception e) {
             return handleApiException(e, HttpStatus.BAD_REQUEST);
         }
     }
@@ -69,12 +69,12 @@ public class CategoryController extends BaseController {
     public ResponseEntity getCategory(){
         try {
             logger.info("Received request: method={}, path={}, description={}", "GET", "/api/category", "Get Category API");
-            User user = userRepository.getByPhoneNumber("010-2944-0386");
+            User user = userRepository.getByPhoneNumber("01029440386");
 
             List<CategoryResponseDto.getCategoryDTO> res = categoryService.getCategory(user);
 
             return new ResponseEntity( DefaultRes.res(StatusCode.OK, ResponseMessage.GET_CATEGORY_SUCCESS, res), HttpStatus.OK);
-        } catch (CustomExceptions.testException e) {
+        } catch (CustomExceptions.Exception e) {
             return handleApiException(e, HttpStatus.BAD_REQUEST);
         }
     }

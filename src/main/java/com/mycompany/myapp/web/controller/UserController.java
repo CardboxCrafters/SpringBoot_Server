@@ -17,10 +17,14 @@ import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiResponse;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.HashMap;
+import java.util.Map;
 
 @Api(tags = "유저 관련 API")
 @RestController
@@ -38,12 +42,12 @@ public class UserController extends BaseController {
     public ResponseEntity getUser(){
         try {
             logger.info("Received request: method={}, path={}, description={}", "GET", "/api/user", "Get User API");
-            User user = userRepository.getByPhoneNumber("010-2944-0386");
+            User user = userRepository.getByPhoneNumber("01029440386");
 
             UserResponseDto.UserDto res = userService.getUser(user);
 
             return new ResponseEntity( DefaultRes.res(StatusCode.OK, ResponseMessage.GET_USER_SUCCESS, res), HttpStatus.OK);
-        } catch (CustomExceptions.testException e) {
+        } catch (CustomExceptions.Exception e) {
             return handleApiException(e, HttpStatus.BAD_REQUEST);
         }
     }
@@ -54,12 +58,12 @@ public class UserController extends BaseController {
     public ResponseEntity updateUser(@RequestBody UserRequestDto.UpdateUserDto request){
         try {
             logger.info("Received request: method={}, path={}, description={}", "PUT", "/api/user", "Update User API");
-            User user = userRepository.getByPhoneNumber("010-2944-0386");
+            User user = userRepository.getByPhoneNumber("01029440386");
 
             userService.updateUser(user, request);
 
             return new ResponseEntity( DefaultRes.res(StatusCode.OK, ResponseMessage.UPDATE_USER_SUCCESS), HttpStatus.OK);
-        } catch (CustomExceptions.testException e) {
+        } catch (CustomExceptions.Exception e) {
             return handleApiException(e, HttpStatus.BAD_REQUEST);
         }
     }
@@ -70,12 +74,12 @@ public class UserController extends BaseController {
     public ResponseEntity withdrawUser(){
         try {
             logger.info("Received request: method={}, path={}, description={}", "PATCH", "/api/user", "Withdraw User API");
-            User user = userRepository.getByPhoneNumber("010-3020-0386");
+            User user = userRepository.getByPhoneNumber("01030200386");
 
             userService.withdrawUser(user);
 
             return new ResponseEntity( DefaultRes.res(StatusCode.OK, ResponseMessage.WITHDRAW_USER_SUCCESS), HttpStatus.OK);
-        } catch (CustomExceptions.testException e) {
+        } catch (CustomExceptions.Exception e) {
             return handleApiException(e, HttpStatus.BAD_REQUEST);
         }
     }
@@ -83,15 +87,42 @@ public class UserController extends BaseController {
     @ApiOperation(value = "Send SMS Certification API")
     @ApiResponse(code = 200, message = "SMS 인증 문자 전송 성공")
     @PostMapping("/sms-certification/send")
-    public ResponseEntity sendSMS(@RequestBody UserRequestDto.SmsCertificationDto request){
+    public ResponseEntity sendSMS(@RequestBody UserRequestDto.SendSmsCertificationDto request){
         try {
             logger.info("Received request: method={}, path={}, description={}", "POST", "/sms-certification/send", "Send SMS Certification API");
-            User user = userRepository.getByPhoneNumber("010-2944-0386");
+            User user = userRepository.getByPhoneNumber("01029440386");
 
             userService.sendSms(request);
 
             return new ResponseEntity( DefaultRes.res(StatusCode.OK, ResponseMessage.SEND_CERTIFICATION_SUCCESS), HttpStatus.OK);
-        } catch (CustomExceptions.testException e) {
+        } catch (CustomExceptions.Exception e) {
+            return handleApiException(e, HttpStatus.BAD_REQUEST);
+        }
+    }
+
+    @ApiOperation(value = "Confirm SMS Certification API")
+    @ApiResponse(code = 200, message = "SMS 문자 인증 성공")
+    @PostMapping("/sms-certification/confirm")
+    public ResponseEntity confrimSMS(@RequestBody UserRequestDto.ConfirmSmsCertificationDto request){
+        try {
+            logger.info("Received request: method={}, path={}, description={}", "POST", "/sms-certification/confirm", "Confirm SMS Certification API");
+            User user = userRepository.getByPhoneNumber("01029440386");
+
+            Long userId = userService.verifyAndRegisterUser(request);
+            String accessToken = jwtUtil.generateAccessToken(userId);
+            String refreshToken = jwtUtil.generateRefreshToken(userId);
+            System.out.println(refreshToken);
+            System.out.println(accessToken);
+
+            userService.saveRefreshToken(refreshToken);
+
+            HttpHeaders headers = new HttpHeaders();
+            headers.add("Authorization", "Bearer " + accessToken);
+            Map<String, Object> response = new HashMap<>();
+            response.put("accessToken", accessToken);
+
+            return new ResponseEntity( DefaultRes.res(StatusCode.OK, ResponseMessage.CONFIRM_CERTIFICATION_SUCCESS, response), HttpStatus.OK);
+        } catch (CustomExceptions.Exception e) {
             return handleApiException(e, HttpStatus.BAD_REQUEST);
         }
     }

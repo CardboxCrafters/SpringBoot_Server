@@ -38,12 +38,12 @@ public class NameCardController extends BaseController {
                                        @RequestPart("request") NamecardRequestDto.NamecardDto request) throws IOException {
         try {
             logger.info("Received request: method={}, path={}, description={}", "POST", "/api/namecard", "Save Namecard API");
-            User user = userRepository.getByPhoneNumber("010-2944-0386");
+            User user = userRepository.getByPhoneNumber("01029440386");
 
             namecardService.createNamecard(user, request, image);
 
             return new ResponseEntity( DefaultRes.res(StatusCode.OK, ResponseMessage.CREATE_NAMECARD_SUCCESS), HttpStatus.OK);
-        } catch (CustomExceptions.testException e) {
+        } catch (CustomExceptions.Exception e) {
             return handleApiException(e, HttpStatus.BAD_REQUEST);
         }
     }
@@ -58,7 +58,7 @@ public class NameCardController extends BaseController {
             NamecardResponseDto.OCRResponseDto res = namecardService.postOCR(image);
 
             return new ResponseEntity( DefaultRes.res(StatusCode.OK, ResponseMessage.POST_OCR_SUCCESS, res), HttpStatus.OK);
-        } catch (CustomExceptions.testException e) {
+        } catch (CustomExceptions.Exception e) {
             return handleApiException(e, HttpStatus.BAD_REQUEST);
         }
     }
@@ -69,12 +69,12 @@ public class NameCardController extends BaseController {
     public ResponseEntity getNamecard(@PathVariable("namecard-id") Long namecardId){
         try {
             logger.info("Received request: method={}, path={}, description={}", "GET", "/api/namecard/{namecard-id}", "Get Namecard API");
-            User user = userRepository.getByPhoneNumber("010-2944-0386");
+            User user = userRepository.getByPhoneNumber("01029440386");
 
             NamecardResponseDto.NamecardDTO res = namecardService.getNamecard(namecardId);
 
             return new ResponseEntity( DefaultRes.res(StatusCode.OK, ResponseMessage.GET_NAMECARD_SUCCESS, res), HttpStatus.OK);
-        } catch (CustomExceptions.testException e) {
+        } catch (CustomExceptions.Exception e) {
             return handleApiException(e, HttpStatus.BAD_REQUEST);
         }
     }
@@ -85,12 +85,12 @@ public class NameCardController extends BaseController {
     public ResponseEntity getNamecardByCategory(@RequestParam("category-id") @ApiParam(value = "카테고리 ID", example = "1") Long categoryId){
         try {
             logger.info("Received request: method={}, path={}, description={}", "GET", "/api/namecard?category-id={category-id}", "Get Namecard List By Category API");
-            User user = userRepository.getByPhoneNumber("010-2944-0386");
+            User user = userRepository.getByPhoneNumber("01029440386");
 
             List<NamecardResponseDto.NamecardPreviewDto> res = namecardService.getNamecardByCategory(user, categoryId);
 
             return new ResponseEntity( DefaultRes.res(StatusCode.OK, ResponseMessage.GET_NAMECARD_LIST_SUCCESS, res), HttpStatus.OK);
-        } catch (CustomExceptions.testException e) {
+        } catch (CustomExceptions.Exception e) {
             return handleApiException(e, HttpStatus.BAD_REQUEST);
         }
     }
@@ -101,12 +101,12 @@ public class NameCardController extends BaseController {
     public ResponseEntity getNamecardBykeyword(@RequestParam("keyword") @ApiParam(value = "검색 키워드", example = "1") String keyword){
         try {
             logger.info("Received request: method={}, path={}, description={}", "GET", "/api/namecard?keyword={keyword}", "Search Namecard API");
-            User user = userRepository.getByPhoneNumber("010-2944-0386");
+            User user = userRepository.getByPhoneNumber("01029440386");
 
             List<NamecardResponseDto.NamecardPreviewDto> res = namecardService.searchNamecard(user, keyword);
 
             return new ResponseEntity( DefaultRes.res(StatusCode.OK, ResponseMessage.SEARCH_NAMECARD_SUCCESS, res), HttpStatus.OK);
-        } catch (CustomExceptions.testException e) {
+        } catch (CustomExceptions.Exception e) {
             return handleApiException(e, HttpStatus.BAD_REQUEST);
         }
     }
@@ -117,12 +117,12 @@ public class NameCardController extends BaseController {
     public ResponseEntity deleteCategory(@PathVariable("namecard-id") Long namecardId){
         try {
             logger.info("Received request: method={}, path={}, description={}", "DELETE", "/api/namecard/{namecard-id}", "DELETE Namecard API");
-            User user = userRepository.getByPhoneNumber("010-2944-0386");
+            User user = userRepository.getByPhoneNumber("01029440386");
 
             namecardService.deleteNamecard(namecardId);
 
             return new ResponseEntity( DefaultRes.res(StatusCode.OK, ResponseMessage.DELETE_NAMECARD_SUCCESS), HttpStatus.OK);
-        } catch (CustomExceptions.testException e) {
+        } catch (CustomExceptions.Exception e) {
             return handleApiException(e, HttpStatus.BAD_REQUEST);
         }
     }
@@ -133,12 +133,12 @@ public class NameCardController extends BaseController {
     public ResponseEntity updateUser(@PathVariable("namecard-id") Long namecardId, @RequestBody NamecardRequestDto.NamecardDto request){
         try {
             logger.info("Received request: method={}, path={}, description={}", "PATCH", "/api/namecard/namecardId", "Update Namecard API");
-            User user = userRepository.getByPhoneNumber("010-2944-0386");
+            User user = userRepository.getByPhoneNumber("01029440386");
 
             namecardService.updateNamecard(request, namecardId);
 
             return new ResponseEntity( DefaultRes.res(StatusCode.OK, ResponseMessage.UPDATE_NAMECARD_SUCCESS), HttpStatus.OK);
-        } catch (CustomExceptions.testException e) {
+        } catch (CustomExceptions.Exception e) {
             return handleApiException(e, HttpStatus.BAD_REQUEST);
         }
     }

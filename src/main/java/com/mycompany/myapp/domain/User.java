@@ -27,4 +27,10 @@ public class User extends BaseEntity {
     public void withdrawUser(){
         this.status = UserStatus.INACTIVE;
     }
+
+    public void resetUser(String name, String phoneNumber){
+        this.username = name;
+        this.phoneNumber = phoneNumber;
+        this.status = UserStatus.ACTIVE;
+    }
 }

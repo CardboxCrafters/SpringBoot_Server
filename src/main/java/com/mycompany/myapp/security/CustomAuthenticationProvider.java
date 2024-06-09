@@ -46,7 +46,7 @@ public class CustomAuthenticationProvider implements AuthenticationProvider {
             return new UsernamePasswordAuthenticationToken(userDetails, token, userDetails.getAuthorities());
         }
 
-        throw new CustomExceptions.UserNotFoundException("User not found");
+        throw new CustomExceptions.Exception("User not found");
     }
 
     @Override
