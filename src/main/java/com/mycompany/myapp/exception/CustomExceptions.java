@@ -9,4 +9,12 @@ public class CustomExceptions {
         }
     }
 
+    public static class RefreshTokenInvalidException extends  RuntimeException{
+        public RefreshTokenInvalidException(String message){super(message);}
+    }
+
+    public static class UserNotFoundException extends RuntimeException{
+        public UserNotFoundException(String message){super(message);}
+    }
+
 }

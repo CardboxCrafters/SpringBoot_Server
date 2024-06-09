@@ -8,8 +8,8 @@ import com.mycompany.myapp.repository.CategoryRepository;
 import com.mycompany.myapp.repository.NamecardRepository;
 import com.mycompany.myapp.service.NamecardService;
 import com.mycompany.myapp.service.S3Service;
-import com.mycompany.myapp.util.HttpRequestUtils;
-import com.mycompany.myapp.util.ImageUtils;
+import com.mycompany.myapp.util.HttpRequestUtil;
+import com.mycompany.myapp.util.ImageUtil;
 import com.mycompany.myapp.web.dto.NamecardRequestDto;
 import com.mycompany.myapp.web.dto.NamecardResponseDto;
 import lombok.RequiredArgsConstructor;
@@ -31,14 +31,14 @@ public class NamecardServiceImpl implements NamecardService {
     private final CategoryRepository categoryRepository;
     private final AddressConverter addressConverter;
     private final AddressRepository addressRepository;
-    private final HttpRequestUtils httpRequestUtils;
     private final S3Service s3Service;
+    private final HttpRequestUtil httpRequestUtil;
 
     @Transactional
     @Override
     public void createNamecard(User user, NamecardRequestDto.NamecardDto request, MultipartFile image) throws IOException {
         //이미지 크롭
-        byte[] croppedImageBytes = HttpRequestUtils.cropImage(image);
+        byte[] croppedImageBytes = HttpRequestUtil.cropImage(image);
 
         // S3에 이미지 업로드
         String fileName = UUID.randomUUID().toString() + "_" + image.getOriginalFilename();
@@ -59,7 +59,7 @@ public class NamecardServiceImpl implements NamecardService {
         try {
             // image를 Base64로 인코딩
             String base64Image = Base64.encodeBase64String(image.getBytes());
-            return httpRequestUtils.postOCR(base64Image);
+            return httpRequestUtil.postOCR(base64Image);
         } catch (IOException e) {
             e.printStackTrace();
             return null;

@@ -2,11 +2,13 @@ package com.mycompany.myapp.service.impl;
 
 import com.mycompany.myapp.converter.NamecardConverter;
 import com.mycompany.myapp.converter.UserConverter;
+import com.mycompany.myapp.dao.SmsCertificationDao;
 import com.mycompany.myapp.domain.NameCard;
 import com.mycompany.myapp.domain.User;
 import com.mycompany.myapp.repository.NamecardRepository;
 import com.mycompany.myapp.repository.UserRepository;
 import com.mycompany.myapp.service.UserService;
+import com.mycompany.myapp.util.SmsCertificationUtil;
 import com.mycompany.myapp.web.controller.UserController;
 import com.mycompany.myapp.web.dto.NamecardRequestDto;
 import com.mycompany.myapp.web.dto.UserRequestDto;
@@ -23,6 +25,8 @@ public class UserServiceImpl implements UserService {
     private final NamecardRepository namecardRepository;
     private final UserConverter userConverter;
     private final UserRepository userRepository;
+    private final SmsCertificationUtil smsUtil;
+    private final SmsCertificationDao smsCertificationDao;
 
     @Override
     public UserResponseDto.UserDto getUser(User user){
@@ -43,5 +47,14 @@ public class UserServiceImpl implements UserService {
     public void withdrawUser(User user){
         user.withdrawUser();
         userRepository.save(user);
+    }
+
+    @Override
+    public void sendSms(UserRequestDto.SmsCertificationDto request){
+        String to = request.getPhone();
+        int randomNumber = (int) (Math.random() * 9000) + 1000;
+        String certificationNumber = String.valueOf(randomNumber);
+        smsUtil.sendSms(to, certificationNumber);
+        smsCertificationDao.createSmsCertification(to, certificationNumber);
     }
 }

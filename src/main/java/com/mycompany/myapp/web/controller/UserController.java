@@ -6,6 +6,7 @@ import com.mycompany.myapp.exception.ResponseMessage;
 import com.mycompany.myapp.exception.StatusCode;
 import com.mycompany.myapp.repository.UserRepository;
 import com.mycompany.myapp.service.UserService;
+import com.mycompany.myapp.util.JwtUtil;
 import com.mycompany.myapp.web.controller.base.BaseController;
 import com.mycompany.myapp.web.dto.NamecardRequestDto;
 import com.mycompany.myapp.web.dto.NamecardResponseDto;
@@ -29,6 +30,7 @@ public class UserController extends BaseController {
 
     private final UserRepository userRepository;
     private final UserService userService;
+    private final JwtUtil jwtUtil;
 
     @ApiOperation(value = "Get User API")
     @ApiResponse(code = 200, message = "내 정보 불러오기 성공")
@@ -73,6 +75,22 @@ public class UserController extends BaseController {
             userService.withdrawUser(user);
 
             return new ResponseEntity( DefaultRes.res(StatusCode.OK, ResponseMessage.WITHDRAW_USER_SUCCESS), HttpStatus.OK);
+        } catch (CustomExceptions.testException e) {
+            return handleApiException(e, HttpStatus.BAD_REQUEST);
+        }
+    }
+
+    @ApiOperation(value = "Send SMS Certification API")
+    @ApiResponse(code = 200, message = "SMS 인증 문자 전송 성공")
+    @PostMapping("/sms-certification/send")
+    public ResponseEntity sendSMS(@RequestBody UserRequestDto.SmsCertificationDto request){
+        try {
+            logger.info("Received request: method={}, path={}, description={}", "POST", "/sms-certification/send", "Send SMS Certification API");
+            User user = userRepository.getByPhoneNumber("010-2944-0386");
+
+            userService.sendSms(request);
+
+            return new ResponseEntity( DefaultRes.res(StatusCode.OK, ResponseMessage.SEND_CERTIFICATION_SUCCESS), HttpStatus.OK);
         } catch (CustomExceptions.testException e) {
             return handleApiException(e, HttpStatus.BAD_REQUEST);
         }

@@ -9,7 +9,7 @@ import java.util.List;
 
 @Component
 @RequiredArgsConstructor
-public class ImageUtils {
+public class ImageUtil {
     /*
     static {
         System.loadLibrary(Core.NATIVE_LIBRARY_NAME);

@@ -16,7 +16,7 @@ import java.io.IOException;
 
 @Component
 @RequiredArgsConstructor
-public class HttpRequestUtils {
+public class HttpRequestUtil {
     private final NamecardConverter namecardConverter;
 
     @Value("${ocr.secret}")

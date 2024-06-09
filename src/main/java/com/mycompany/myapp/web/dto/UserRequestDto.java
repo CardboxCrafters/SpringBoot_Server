@@ -47,4 +47,11 @@ public class UserRequestDto {
         @ApiParam(name = "address", value = "주소 입력", required = true)
         private String address;
     }
+
+    @Getter
+    public static class SmsCertificationDto{
+        @ApiModelProperty(example = "010-1234-5678")
+        @ApiParam(name = "phone", value = "휴대폰 번호 입력", required = true)
+        private String phone;
+    }
 }
