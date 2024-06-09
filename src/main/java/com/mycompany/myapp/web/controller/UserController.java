@@ -89,7 +89,7 @@ public class UserController extends BaseController {
     @PostMapping("/sms-certification/send")
     public ResponseEntity sendSMS(@RequestBody UserRequestDto.SendSmsCertificationDto request){
         try {
-            logger.info("Received request: method={}, path={}, description={}", "POST", "/sms-certification/send", "Send SMS Certification API");
+            logger.info("Received request: method={}, path={}, description={}", "POST", "api/user/sms-certification/send", "Send SMS Certification API");
             User user = userRepository.getByPhoneNumber("01029440386");
 
             userService.sendSms(request);
@@ -105,7 +105,7 @@ public class UserController extends BaseController {
     @PostMapping("/sms-certification/confirm")
     public ResponseEntity confrimSMS(@RequestBody UserRequestDto.ConfirmSmsCertificationDto request){
         try {
-            logger.info("Received request: method={}, path={}, description={}", "POST", "/sms-certification/confirm", "Confirm SMS Certification API");
+            logger.info("Received request: method={}, path={}, description={}", "POST", "api/user/sms-certification/confirm", "Confirm SMS Certification API");
             User user = userRepository.getByPhoneNumber("01029440386");
 
             Long userId = userService.verifyAndRegisterUser(request);
@@ -122,6 +122,24 @@ public class UserController extends BaseController {
             response.put("accessToken", accessToken);
 
             return new ResponseEntity( DefaultRes.res(StatusCode.OK, ResponseMessage.CONFIRM_CERTIFICATION_SUCCESS, response), HttpStatus.OK);
+        } catch (CustomExceptions.Exception e) {
+            return handleApiException(e, HttpStatus.BAD_REQUEST);
+        }
+    }
+
+    @ApiOperation(value = "Reissue Access Token API")
+    @ApiResponse(code = 200, message = "Access Toekn 재발급 성공")
+    @GetMapping("/reissue")
+    public ResponseEntity reissue(){
+        try {
+            logger.info("Received request: method={}, path={}, description={}", "GET", "/api/user/reissue", "Reissue Access Token API");
+            User user = userRepository.getByPhoneNumber("01029440386");
+
+            String newAccessToken = userService.reissueAccessToken(user);
+            Map<String, Object> res = new HashMap<>();
+            res.put("accessToken", newAccessToken);
+
+            return new ResponseEntity( DefaultRes.res(StatusCode.OK, ResponseMessage.REISSUE_ACCESS_TOKEN_SUCCESS, res), HttpStatus.OK);
         } catch (CustomExceptions.Exception e) {
             return handleApiException(e, HttpStatus.BAD_REQUEST);
         }

@@ -11,4 +11,5 @@ public interface UserService {
     void sendSms(UserRequestDto.SendSmsCertificationDto request);
     Long verifyAndRegisterUser(UserRequestDto.ConfirmSmsCertificationDto request);
     void saveRefreshToken(String refreshToken);
+    String reissueAccessToken(User user);
 }

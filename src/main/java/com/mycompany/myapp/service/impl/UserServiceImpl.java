@@ -101,6 +101,15 @@ public class UserServiceImpl implements UserService {
         refreshTokenRepository.save(refreshToken);
     }
 
+    @Override
+    public String reissueAccessToken(User user){
+        RefreshToken token = refreshTokenRepository.findByUser(user);
+        if(jwtUtil.validateToken(token.getToken(), user))
+            return jwtUtil.generateAccessToken(user.getId());
+        else
+            throw new CustomExceptions.Exception("refreshToken이 만료되었습니다.");
+    }
+
     private void verifySms(UserRequestDto.ConfirmSmsCertificationDto request) {
         if (isVerify(request)) {
             throw new CustomExceptions.Exception("인증번호가 일치하지 않습니다.");

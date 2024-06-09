@@ -29,4 +29,5 @@ public class ResponseMessage {
     public static final String WITHDRAW_USER_SUCCESS = "회원 탈퇴 성공";
     public static final String SEND_CERTIFICATION_SUCCESS = "SMS 인증 문자 전송 성공";
     public static final String CONFIRM_CERTIFICATION_SUCCESS = "SMS 문자 인증 성공";
+    public static final String REISSUE_ACCESS_TOKEN_SUCCESS = "Access Toekn 재발급 성공";
 }
