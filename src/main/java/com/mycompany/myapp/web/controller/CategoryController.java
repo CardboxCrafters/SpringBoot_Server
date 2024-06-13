@@ -37,6 +37,7 @@ public class CategoryController extends BaseController {
         try {
             logger.info("Received request: method={}, path={}, description={}", "POST", "/api/category", "Create Category API");
             User user = userRepository.getByPhoneNumber("01029440386");
+
             String categoryName = request.getCategory();
 
             categoryService.createCategory(user, categoryName);

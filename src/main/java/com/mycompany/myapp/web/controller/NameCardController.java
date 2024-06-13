@@ -22,6 +22,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
 import java.util.List;
+import java.util.Optional;
 
 @Api(tags = "명함첩 관련 API")
 @RestController
@@ -34,6 +35,23 @@ public class NameCardController extends BaseController {
     @ApiOperation(value = "Save Namecard API")
     @ApiResponse(code = 200, message = "명함 등록 성공")
     @PostMapping("")
+    public ResponseEntity saveCroppedNamecard(@RequestPart("image") MultipartFile image,
+                                       @RequestPart("request") NamecardRequestDto.NamecardDto request) throws IOException {
+        try {
+            logger.info("Received request: method={}, path={}, description={}", "POST", "/api/namecard", "Save Namecard API");
+            User user = userRepository.getByPhoneNumber("01029440386");
+
+            namecardService.createCroppedNamecard(user, request, image);
+
+            return new ResponseEntity( DefaultRes.res(StatusCode.OK, ResponseMessage.CREATE_NAMECARD_SUCCESS), HttpStatus.OK);
+        } catch (CustomExceptions.Exception e) {
+            return handleApiException(e, HttpStatus.BAD_REQUEST);
+        }
+    }
+
+    @ApiOperation(value = "Save Namecard API")
+    @ApiResponse(code = 200, message = "명함 등록 성공")
+    @PostMapping("/save")
     public ResponseEntity saveNamecard(@RequestPart("image") MultipartFile image,
                                        @RequestPart("request") NamecardRequestDto.NamecardDto request) throws IOException {
         try {
@@ -82,7 +100,7 @@ public class NameCardController extends BaseController {
     @ApiOperation(value = "Get Namecard List API")
     @ApiResponse(code = 200, message = "카테고리 별 명함첩 불러오기 성공")
     @GetMapping("")
-    public ResponseEntity getNamecardByCategory(@RequestParam("category-id") @ApiParam(value = "카테고리 ID", example = "1") Long categoryId){
+    public ResponseEntity getNamecardByCategory(@RequestParam("category-id") @ApiParam(value = "카테고리 ID", example = "1") Optional<Long> categoryId){
         try {
             logger.info("Received request: method={}, path={}, description={}", "GET", "/api/namecard?category-id={category-id}", "Get Namecard List By Category API");
             User user = userRepository.getByPhoneNumber("01029440386");

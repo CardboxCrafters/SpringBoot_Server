@@ -15,10 +15,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.Collections;
-import java.util.Comparator;
-import java.util.List;
-import java.util.NoSuchElementException;
+import java.util.*;
 
 @Service
 @Transactional(readOnly = true)
@@ -31,17 +28,17 @@ public class MapServiceImpl implements MapService {
     private final CategoryRepository categoryRepository;
 
     @Override
-    public MapResponseDto.LocationDataListDto getLocationData(User user, Double latitude, Double longitude, Long categoryId){
-        Category category = categoryRepository.findById(categoryId)
-                .orElseThrow(() -> new NoSuchElementException("Category not found."));
-
+    public MapResponseDto.LocationDataListDto getLocationData(User user, Double latitude, Double longitude, Optional<Long> categoryId){
         List<Address> nearbyAddress;
-        Double distanceThreshold = 1000.0;
+        Double distanceThreshold = 100000.0;
 
-        if ("all".equals(category.getName())){
-            nearbyAddress = addressRepository.findNearbyAddressAndIsUserFalse(latitude,longitude, distanceThreshold);
-        } else {
+        if (categoryId.isPresent()) {
+            Category category = categoryRepository.findById(categoryId.get())
+                    .orElseThrow(() -> new NoSuchElementException("Category not found."));
+
             nearbyAddress = addressRepository.findNearbyAddressByCategoryAndIsUserFalse(latitude,longitude, distanceThreshold, categoryId);
+        } else {
+            nearbyAddress = addressRepository.findNearbyAddressAndIsUserFalse(latitude,longitude, distanceThreshold);
         }
 
         return addressConverter.toAddressDataListDto(nearbyAddress);

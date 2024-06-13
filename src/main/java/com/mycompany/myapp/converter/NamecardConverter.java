@@ -2,6 +2,7 @@ package com.mycompany.myapp.converter;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.mycompany.myapp.domain.Address;
 import com.mycompany.myapp.domain.Category;
 import com.mycompany.myapp.domain.NameCard;
 import com.mycompany.myapp.domain.User;
@@ -91,7 +92,7 @@ public class NamecardConverter {
                 .build();
     }
 
-    public NamecardResponseDto.NamecardDTO getNamecard(NameCard nameCard){
+    public NamecardResponseDto.NamecardDTO getNamecard(NameCard nameCard, Address address){
         return NamecardResponseDto.NamecardDTO.builder()
                 .name(nameCard.getName())
                 .mobile(nameCard.getMobile())
@@ -104,6 +105,8 @@ public class NamecardConverter {
                 .fax(nameCard.getFax())
                 .homepage(nameCard.getHomepage())
                 .categoryName(nameCard.getCategory().getName())
+                .latitude(address.getLatitude())
+                .longitude(address.getLongitude())
                 .build();
     }
 
@@ -115,6 +118,7 @@ public class NamecardConverter {
                 .department(nameCard.getDepartment())
                 .company(nameCard.getCompany())
                 .namecardUrl(nameCard.getUrl())
+                .categoryName(nameCard.getCategory().getName())
                 .build();
     }
 
@@ -127,6 +131,15 @@ public class NamecardConverter {
                 .department(namecard.getDepartment())
                 .company(namecard.getCompany())
                 .namecardUrl(namecard.getUrl())
+                .build();
+    }
+
+    public NameCard registerUser(String name, String phone, User user){
+        return NameCard.builder()
+                .name(name)
+                .mobile(phone)
+                .isUser(true)
+                .user(user)
                 .build();
     }
 }

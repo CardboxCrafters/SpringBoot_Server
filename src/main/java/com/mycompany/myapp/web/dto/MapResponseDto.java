@@ -1,5 +1,6 @@
 package com.mycompany.myapp.web.dto;
 
+import com.mycompany.myapp.domain.Category;
 import lombok.*;
 
 import java.util.List;
@@ -42,5 +43,6 @@ public class MapResponseDto {
         private String department;
         private String company;
         private String namecardUrl;
+        private String categoryName;
     }
 }

@@ -23,4 +23,11 @@ public class CategoryConverter {
                 .name(name)
                 .build();
     }
+
+    public Category registerUser(User user){
+        return Category.builder()
+                .name("all")
+                .user(user)
+                .build();
+    }
 }

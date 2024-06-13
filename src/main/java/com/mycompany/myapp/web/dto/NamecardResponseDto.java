@@ -35,6 +35,8 @@ public class NamecardResponseDto {
         private String homepage;
         private String address;
         private String categoryName;
+        private Double latitude;
+        private Double longitude;
     }
 
     @Builder @Getter

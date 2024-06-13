@@ -3,6 +3,7 @@ package com.mycompany.myapp.domain;
 import com.mycompany.myapp.domain.base.BaseEntity;
 import com.mycompany.myapp.domain.enums.UserStatus;
 import com.mycompany.myapp.web.dto.NamecardRequestDto;
+import com.mycompany.myapp.web.dto.UserRequestDto;
 import lombok.*;
 
 import javax.persistence.*;
@@ -16,11 +17,11 @@ public class NameCard extends BaseEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long Id;
 
-    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.PERSIST)
+    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.MERGE)
     @JoinColumn(name = "user_id")
     private User user;
 
-    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.PERSIST)
+    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.MERGE)
     @JoinColumn(name = "category_id")
     private Category category;
 
@@ -51,6 +52,23 @@ public class NameCard extends BaseEntity {
 
     public void updateNamecard(NamecardRequestDto.NamecardDto request, Category category){
         this.category = category;
+        this.name = request.getName();
+        this.company = request.getCompany();
+        this.department = request.getDepartment();
+        this.address = request.getAddress();
+        this.position = request.getPosition();
+        this.mobile = request.getMobile();
+        this.tel = request.getTel();
+        this.fax = request.getFax();
+        this.email = request.getEmail();
+        this.homepage = request.getHomepage();
+    }
+
+    public void updateCategory(Category allCategory){
+        this.category = allCategory;
+    }
+
+    public void updateNamecard(UserRequestDto.UpdateUserDto request){
         this.name = request.getName();
         this.company = request.getCompany();
         this.department = request.getDepartment();

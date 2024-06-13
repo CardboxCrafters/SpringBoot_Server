@@ -9,7 +9,6 @@ import com.mycompany.myapp.repository.NamecardRepository;
 import com.mycompany.myapp.service.NamecardService;
 import com.mycompany.myapp.service.S3Service;
 import com.mycompany.myapp.util.HttpRequestUtil;
-import com.mycompany.myapp.util.ImageUtil;
 import com.mycompany.myapp.web.dto.NamecardRequestDto;
 import com.mycompany.myapp.web.dto.NamecardResponseDto;
 import lombok.RequiredArgsConstructor;
@@ -36,13 +35,32 @@ public class NamecardServiceImpl implements NamecardService {
 
     @Transactional
     @Override
-    public void createNamecard(User user, NamecardRequestDto.NamecardDto request, MultipartFile image) throws IOException {
+    public void createCroppedNamecard(User user, NamecardRequestDto.NamecardDto request, MultipartFile image) throws IOException {
         //이미지 크롭
         byte[] croppedImageBytes = HttpRequestUtil.cropImage(image);
 
         // S3에 이미지 업로드
         String fileName = UUID.randomUUID().toString() + "_" + image.getOriginalFilename();
         String imageUrl = s3Service.uploadFile(croppedImageBytes, fileName);
+
+        Category category = categoryRepository.findById(request.getCategoryId())
+                .orElseThrow(() -> new NoSuchElementException("Category not found"));
+
+        NameCard nameCard = namecardConverter.createNamecard(user, request, category, imageUrl);
+        namecardRepository.save(nameCard);
+
+        Address address = addressConverter.createAddress(request, nameCard);
+        addressRepository.save(address);
+    }
+
+    @Transactional
+    @Override
+    public void createNamecard(User user, NamecardRequestDto.NamecardDto request, MultipartFile image) throws IOException {
+        byte[] fileBytes = image.getBytes();
+
+        // S3에 이미지 업로드
+        String fileName = UUID.randomUUID().toString() + "_" + image.getOriginalFilename();
+        String imageUrl = s3Service.uploadFile(fileBytes, fileName);
 
         Category category = categoryRepository.findById(request.getCategoryId())
                 .orElseThrow(() -> new NoSuchElementException("Category not found"));
@@ -71,20 +89,22 @@ public class NamecardServiceImpl implements NamecardService {
         NameCard namecard = namecardRepository.findById(namecardId)
                 .orElseThrow(() -> new NoSuchElementException("Namecard not found."));
 
-        return namecardConverter.getNamecard(namecard);
+        Address address = addressRepository.findOneByNameCard(namecard);
+
+        return namecardConverter.getNamecard(namecard, address);
     }
 
     @Override
-    public List<NamecardResponseDto.NamecardPreviewDto> getNamecardByCategory(User user, Long categoryId){
-        Category category = categoryRepository.findById(categoryId)
-                .orElseThrow(() -> new NoSuchElementException("Category not found."));
-
+    public List<NamecardResponseDto.NamecardPreviewDto> getNamecardByCategory(User user, Optional<Long> categoryId){
         List<NameCard> nameCardList;
 
-        if ("all".equals(category.getName())){
-            nameCardList = namecardRepository.findByUserAndIsUserFalse(category.getUser());
-        } else {
+        if (categoryId.isPresent()) {
+            Category category = categoryRepository.findById(categoryId.get())
+                    .orElseThrow(() -> new NoSuchElementException("Category not found."));
+
             nameCardList = namecardRepository.findByCategory(category);
+        } else {
+            nameCardList = namecardRepository.findByUserAndIsUserFalse(user);
         }
 
         Collections.sort(nameCardList, Comparator.comparing(NameCard::getName));
@@ -112,6 +132,9 @@ public class NamecardServiceImpl implements NamecardService {
     public void deleteNamecard(Long namecardId){
         NameCard nameCard = namecardRepository.findById(namecardId)
                 .orElseThrow(() -> new NoSuchElementException("Namecard not found"));
+
+        List<Address> addresses = addressRepository.findByNameCard(nameCard);
+        addressRepository.deleteAll(addresses);
 
         namecardRepository.delete(nameCard);
     }

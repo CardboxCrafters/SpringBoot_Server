@@ -3,6 +3,7 @@ package com.mycompany.myapp.converter;
 import com.mycompany.myapp.domain.NameCard;
 import com.mycompany.myapp.domain.RefreshToken;
 import com.mycompany.myapp.domain.User;
+import com.mycompany.myapp.domain.enums.UserStatus;
 import com.mycompany.myapp.web.dto.UserResponseDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
@@ -35,6 +36,14 @@ public class UserConverter {
                 .token(token)
                 .expirationTime(tokenExpTime)
                 .user(user)
+                .build();
+    }
+
+    public User registerUser(String name, String phone){
+        return User.builder()
+                .username(name)
+                .phoneNumber(phone)
+                .status(UserStatus.ACTIVE)
                 .build();
     }
 }

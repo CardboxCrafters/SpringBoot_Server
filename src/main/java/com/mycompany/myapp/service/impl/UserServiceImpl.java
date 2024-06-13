@@ -1,13 +1,16 @@
 package com.mycompany.myapp.service.impl;
 
+import com.mycompany.myapp.converter.CategoryConverter;
 import com.mycompany.myapp.converter.NamecardConverter;
 import com.mycompany.myapp.converter.UserConverter;
 import com.mycompany.myapp.dao.SmsCertificationDao;
+import com.mycompany.myapp.domain.Category;
 import com.mycompany.myapp.domain.NameCard;
 import com.mycompany.myapp.domain.RefreshToken;
 import com.mycompany.myapp.domain.User;
 import com.mycompany.myapp.domain.enums.UserStatus;
 import com.mycompany.myapp.exception.CustomExceptions;
+import com.mycompany.myapp.repository.CategoryRepository;
 import com.mycompany.myapp.repository.NamecardRepository;
 import com.mycompany.myapp.repository.RefreshTokenRepository;
 import com.mycompany.myapp.repository.UserRepository;
@@ -38,6 +41,9 @@ public class UserServiceImpl implements UserService {
     private final SmsCertificationDao smsCertificationDao;
     private final JwtUtil jwtUtil;
     private final RefreshTokenRepository refreshTokenRepository;
+    private final CategoryRepository categoryRepository;
+    private final NamecardConverter namecardConverter;
+    private final CategoryConverter categoryConverter;
 
     @Override
     public UserResponseDto.UserDto getUser(User user){
@@ -50,7 +56,7 @@ public class UserServiceImpl implements UserService {
     @Transactional
     public void updateUser(User user, UserRequestDto.UpdateUserDto request){
         NameCard namecard = namecardRepository.findByUserAndIsUserTrue(user);
-        namecardRepository.updateNamecard(request.getName(), request.getCompany(), request.getDepartment(), request.getPosition(), request.getMobile(), request.getEmail(), request.getTel(), request.getFax(), request.getHomepage(), request.getAddress());
+        namecard.updateNamecard(request);
     }
 
     @Override
@@ -70,6 +76,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
+    @Transactional
     public Long verifyAndRegisterUser(UserRequestDto.ConfirmSmsCertificationDto request){
         verifySms(request);
 
@@ -127,13 +134,18 @@ public class UserServiceImpl implements UserService {
         if (isVerify(request)) {
             User existingUser = userRepository.findByPhoneNumber(request.getPhone());
             if (existingUser == null) {
-                User user = User
-                        .builder()
-                        .username(request.getName())
-                        .phoneNumber(request.getPhone())
-                        .status(UserStatus.ACTIVE)
-                        .build();
+                String name = request.getName();
+                String phone = request.getPhone();
+
+                User user = userConverter.registerUser(name, phone);
                 userRepository.save(user);
+
+                NameCard nameCard = namecardConverter.registerUser(name, phone, user);
+                namecardRepository.save(nameCard);
+
+                Category allCategory = categoryConverter.registerUser(user);
+                categoryRepository.save(allCategory);
+
                 return user.getId();
             }
         }
