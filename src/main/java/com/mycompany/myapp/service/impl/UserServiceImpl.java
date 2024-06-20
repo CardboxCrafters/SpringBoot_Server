@@ -22,8 +22,12 @@ import com.mycompany.myapp.web.dto.NamecardRequestDto;
 import com.mycompany.myapp.web.dto.UserRequestDto;
 import com.mycompany.myapp.web.dto.UserResponseDto;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.server.ResponseStatusException;
 
 import java.util.Date;
 import java.util.NoSuchElementException;
@@ -170,6 +174,23 @@ public class UserServiceImpl implements UserService {
             throw new CustomExceptions.Exception("전화번호 " + phoneNumber + "를 사용하는 사용자가 없습니다.");
         }
         return user.getId();
+    }
+
+    public User getCurrentUser() {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        if (authentication == null) {
+            throw new ResponseStatusException(
+                    HttpStatus.UNAUTHORIZED, "로그인 되지 않았습니다."
+            );
+        }
+        Long userId = (Long) authentication.getPrincipal();
+        User user = userRepository.findById(userId)
+                .orElseThrow(() -> new NoSuchElementException("User not found"));
+
+        if (user.getStatus().equals(UserStatus.INACTIVE)) {
+            throw new IllegalArgumentException("해당 사용자는 탈퇴한 사용자입니다.");
+        }
+        return user;
     }
 
 }

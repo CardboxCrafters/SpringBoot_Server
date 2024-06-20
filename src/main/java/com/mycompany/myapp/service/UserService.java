@@ -12,4 +12,5 @@ public interface UserService {
     Long verifyAndRegisterUser(UserRequestDto.ConfirmSmsCertificationDto request);
     void saveRefreshToken(String refreshToken);
     String reissueAccessToken(User user);
+    User getCurrentUser();
 }

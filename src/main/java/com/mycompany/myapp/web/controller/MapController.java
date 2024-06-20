@@ -7,6 +7,7 @@ import com.mycompany.myapp.exception.StatusCode;
 import com.mycompany.myapp.repository.UserRepository;
 import com.mycompany.myapp.service.MapService;
 import com.mycompany.myapp.service.NamecardService;
+import com.mycompany.myapp.service.UserService;
 import com.mycompany.myapp.web.controller.base.BaseController;
 import com.mycompany.myapp.web.dto.MapResponseDto;
 import com.mycompany.myapp.web.dto.NamecardRequestDto;
@@ -29,6 +30,7 @@ import java.util.Optional;
 public class MapController extends BaseController {
     private final UserRepository userRepository;
     private final MapService mapService;
+    private final UserService userService;
 
     @ApiOperation(value = "GET Map API")
     @ApiResponse(code = 200, message = "지도 불러오기 성공")
@@ -36,7 +38,7 @@ public class MapController extends BaseController {
     public ResponseEntity getMap(@RequestParam("category-id") @ApiParam(value = "카테고리 ID", example = "1") Optional<Long> categoryId, @RequestParam("latitude") @ApiParam(value = "사용자 위치(지도 중심)의 위도", example = "37.2431") double latitude, @RequestParam("longitude") @ApiParam(value = "사용자 위치(지도 중심)의 경도", example = "127.0736") double longitude){
         try {
             logger.info("Received request: method={}, path={}, description={}", "GET", "/api/map?category-id={category-id}&latitude={latitude}&longitude={longitude}", "GET Map API");
-            User user = userRepository.getByPhoneNumber("01029440386");
+            User user = userService.getCurrentUser();
 
             MapResponseDto.LocationDataListDto res = mapService.getLocationData(user, latitude, longitude, categoryId);
 
@@ -52,7 +54,6 @@ public class MapController extends BaseController {
     public ResponseEntity getMapNamecardByCategory(@PathVariable("namecard-id") Long namecardId){
         try {
             logger.info("Received request: method={}, path={}, description={}", "GET", "/api/map/{namecard-id}", "GET Map-namecard By Category API");
-            User user = userRepository.getByPhoneNumber("01029440386");
 
             MapResponseDto.MapNamecardDto res = mapService.getMapNamecard(namecardId);
 

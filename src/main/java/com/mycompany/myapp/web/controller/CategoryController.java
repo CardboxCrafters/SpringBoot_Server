@@ -7,6 +7,7 @@ import com.mycompany.myapp.exception.StatusCode;
 import com.mycompany.myapp.repository.UserRepository;
 import com.mycompany.myapp.service.CategoryService;
 import com.mycompany.myapp.service.NamecardService;
+import com.mycompany.myapp.service.UserService;
 import com.mycompany.myapp.web.controller.base.BaseController;
 import com.mycompany.myapp.web.dto.CategoryRequestDto;
 import com.mycompany.myapp.web.dto.CategoryResponseDto;
@@ -29,6 +30,7 @@ import java.util.List;
 public class CategoryController extends BaseController {
     private final CategoryService categoryService;
     private final UserRepository userRepository;
+    private final UserService userService;
 
     @ApiOperation(value = "Create Category API")
     @ApiResponse(code = 200, message = "카테고리 생성 성공")
@@ -36,7 +38,7 @@ public class CategoryController extends BaseController {
     public ResponseEntity createCategory(@RequestBody CategoryRequestDto.CreateCategoryDto request){
         try {
             logger.info("Received request: method={}, path={}, description={}", "POST", "/api/category", "Create Category API");
-            User user = userRepository.getByPhoneNumber("01029440386");
+            User user = userService.getCurrentUser();
 
             String categoryName = request.getCategory();
 
@@ -54,7 +56,6 @@ public class CategoryController extends BaseController {
     public ResponseEntity deleteCategory(@PathVariable("category-id") Long categoryId){
         try {
             logger.info("Received request: method={}, path={}, description={}", "DELETE", "/api/category", "DELETE Category API");
-            User user = userRepository.getByPhoneNumber("01029440386");
 
             categoryService.deleteCategory(categoryId);
 
@@ -70,7 +71,7 @@ public class CategoryController extends BaseController {
     public ResponseEntity getCategory(){
         try {
             logger.info("Received request: method={}, path={}, description={}", "GET", "/api/category", "Get Category API");
-            User user = userRepository.getByPhoneNumber("01029440386");
+            User user = userService.getCurrentUser();
 
             List<CategoryResponseDto.getCategoryDTO> res = categoryService.getCategory(user);
 

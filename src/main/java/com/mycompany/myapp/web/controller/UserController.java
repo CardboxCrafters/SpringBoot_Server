@@ -42,7 +42,7 @@ public class UserController extends BaseController {
     public ResponseEntity getUser(){
         try {
             logger.info("Received request: method={}, path={}, description={}", "GET", "/api/user", "Get User API");
-            User user = userRepository.getByPhoneNumber("01029440386");
+            User user = userService.getCurrentUser();
 
             UserResponseDto.UserDto res = userService.getUser(user);
 
@@ -58,7 +58,7 @@ public class UserController extends BaseController {
     public ResponseEntity updateUser(@RequestBody UserRequestDto.UpdateUserDto request){
         try {
             logger.info("Received request: method={}, path={}, description={}", "PUT", "/api/user", "Update User API");
-            User user = userRepository.getByPhoneNumber("01029440386");
+            User user = userService.getCurrentUser();
 
             userService.updateUser(user, request);
 
@@ -74,7 +74,7 @@ public class UserController extends BaseController {
     public ResponseEntity withdrawUser(){
         try {
             logger.info("Received request: method={}, path={}, description={}", "PATCH", "/api/user", "Withdraw User API");
-            User user = userRepository.getByPhoneNumber("01030200386");
+            User user = userService.getCurrentUser();
 
             userService.withdrawUser(user);
 
@@ -90,7 +90,6 @@ public class UserController extends BaseController {
     public ResponseEntity sendSMS(@RequestBody UserRequestDto.SendSmsCertificationDto request){
         try {
             logger.info("Received request: method={}, path={}, description={}", "POST", "api/user/sms-certification/send", "Send SMS Certification API");
-            User user = userRepository.getByPhoneNumber("01029440386");
 
             userService.sendSms(request);
 
@@ -106,7 +105,6 @@ public class UserController extends BaseController {
     public ResponseEntity confrimSMS(@RequestBody UserRequestDto.ConfirmSmsCertificationDto request){
         try {
             logger.info("Received request: method={}, path={}, description={}", "POST", "api/user/sms-certification/confirm", "Confirm SMS Certification API");
-            User user = userRepository.getByPhoneNumber("01029440386");
 
             Long userId = userService.verifyAndRegisterUser(request);
             String accessToken = jwtUtil.generateAccessToken(userId);
@@ -133,7 +131,7 @@ public class UserController extends BaseController {
     public ResponseEntity reissue(){
         try {
             logger.info("Received request: method={}, path={}, description={}", "GET", "/api/user/reissue", "Reissue Access Token API");
-            User user = userRepository.getByPhoneNumber("01029440386");
+            User user = userService.getCurrentUser();
 
             String newAccessToken = userService.reissueAccessToken(user);
             Map<String, Object> res = new HashMap<>();

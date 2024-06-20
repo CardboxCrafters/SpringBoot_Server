@@ -5,6 +5,7 @@ import com.mycompany.myapp.exception.ResponseMessage;
 import com.mycompany.myapp.exception.StatusCode;
 import com.mycompany.myapp.repository.UserRepository;
 import com.mycompany.myapp.service.NamecardService;
+import com.mycompany.myapp.service.UserService;
 import com.mycompany.myapp.web.dto.NamecardRequestDto;
 import com.mycompany.myapp.web.dto.NamecardResponseDto;
 import io.swagger.annotations.Api;
@@ -31,6 +32,7 @@ import java.util.Optional;
 public class NameCardController extends BaseController {
     private final NamecardService namecardService;
     private final UserRepository userRepository;
+    private final UserService userService;
 
     @ApiOperation(value = "Save Namecard API")
     @ApiResponse(code = 200, message = "명함 등록 성공")
@@ -39,7 +41,7 @@ public class NameCardController extends BaseController {
                                        @RequestPart("request") NamecardRequestDto.NamecardDto request) throws IOException {
         try {
             logger.info("Received request: method={}, path={}, description={}", "POST", "/api/namecard", "Save Namecard API");
-            User user = userRepository.getByPhoneNumber("01029440386");
+            User user = userService.getCurrentUser();
 
             namecardService.createCroppedNamecard(user, request, image);
 
@@ -56,7 +58,7 @@ public class NameCardController extends BaseController {
                                        @RequestPart("request") NamecardRequestDto.NamecardDto request) throws IOException {
         try {
             logger.info("Received request: method={}, path={}, description={}", "POST", "/api/namecard", "Save Namecard API");
-            User user = userRepository.getByPhoneNumber("01029440386");
+            User user = userService.getCurrentUser();
 
             namecardService.createNamecard(user, request, image);
 
@@ -87,7 +89,6 @@ public class NameCardController extends BaseController {
     public ResponseEntity getNamecard(@PathVariable("namecard-id") Long namecardId){
         try {
             logger.info("Received request: method={}, path={}, description={}", "GET", "/api/namecard/{namecard-id}", "Get Namecard API");
-            User user = userRepository.getByPhoneNumber("01029440386");
 
             NamecardResponseDto.NamecardDTO res = namecardService.getNamecard(namecardId);
 
@@ -103,7 +104,7 @@ public class NameCardController extends BaseController {
     public ResponseEntity getNamecardByCategory(@RequestParam("category-id") @ApiParam(value = "카테고리 ID", example = "1") Optional<Long> categoryId){
         try {
             logger.info("Received request: method={}, path={}, description={}", "GET", "/api/namecard?category-id={category-id}", "Get Namecard List By Category API");
-            User user = userRepository.getByPhoneNumber("01029440386");
+            User user = userService.getCurrentUser();
 
             List<NamecardResponseDto.NamecardPreviewDto> res = namecardService.getNamecardByCategory(user, categoryId);
 
@@ -119,7 +120,7 @@ public class NameCardController extends BaseController {
     public ResponseEntity getNamecardBykeyword(@RequestParam("keyword") @ApiParam(value = "검색 키워드", example = "1") String keyword){
         try {
             logger.info("Received request: method={}, path={}, description={}", "GET", "/api/namecard?keyword={keyword}", "Search Namecard API");
-            User user = userRepository.getByPhoneNumber("01029440386");
+            User user = userService.getCurrentUser();
 
             List<NamecardResponseDto.NamecardPreviewDto> res = namecardService.searchNamecard(user, keyword);
 
@@ -135,7 +136,6 @@ public class NameCardController extends BaseController {
     public ResponseEntity deleteCategory(@PathVariable("namecard-id") Long namecardId){
         try {
             logger.info("Received request: method={}, path={}, description={}", "DELETE", "/api/namecard/{namecard-id}", "DELETE Namecard API");
-            User user = userRepository.getByPhoneNumber("01029440386");
 
             namecardService.deleteNamecard(namecardId);
 
@@ -151,7 +151,6 @@ public class NameCardController extends BaseController {
     public ResponseEntity updateUser(@PathVariable("namecard-id") Long namecardId, @RequestBody NamecardRequestDto.NamecardDto request){
         try {
             logger.info("Received request: method={}, path={}, description={}", "PATCH", "/api/namecard/namecardId", "Update Namecard API");
-            User user = userRepository.getByPhoneNumber("01029440386");
 
             namecardService.updateNamecard(request, namecardId);
 
